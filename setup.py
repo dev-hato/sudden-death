@@ -2,8 +2,10 @@ from glob import glob
 from os.path import basename, splitext
 from setuptools import setup, find_packages
 
+
 def _requires_from_file(filename):
     return open(filename).read().splitlines()
+
 
 setup(
     name="sudden_death",

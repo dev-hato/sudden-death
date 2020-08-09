@@ -17,7 +17,8 @@ def _requires_from_file(filename):
             elif r.startswith('['):
                 is_in_packages = False
             elif r and is_in_packages:
-                requires.append(r.replace('"', '').replace(' ', '').replace('=', '', 1))
+                requires.append(r.replace('"', '').replace(
+                    ' ', '').replace('=', '', 1))
 
     return requires
 

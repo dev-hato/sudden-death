@@ -1,0 +1,79 @@
+name: pr-release
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  # リリース用のPRを作成するjob
+  pr-release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Get diff
+        id: get_diff
+        run: |
+          result=$(git diff origin/develop origin/master)
+          echo "${result}"
+          result="${result//$'\n'/'%0A'}"
+          result="${result//$'\r'/'%0D'}"
+          echo "::set-output name=result::${result}"
+      - name: Create PullRequest
+        uses: actions/github-script@v3
+        if: steps.get_diff.outputs.result != ''
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const common_params = {
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            }
+            const pull_params = {
+              head: "develop",
+              base: "refs/heads/master",
+              ...common_params
+            }
+            const pulls_list_params = {
+              state: "open",
+              ...pull_params
+            }
+            console.log("call pulls.list:")
+            console.log(pulls_list_params)
+            github.pulls.list(pulls_list_params).then(list_res => {
+              if (list_res.data.filter(data => data.user.id === 41898282).length === 0) {
+                const pulls_create_params = {
+                  title: "リリース",
+                  body: "鳩は唐揚げになるため、片栗粉へ飛び込む",
+                  draft: true,
+                  ...pull_params
+                }
+                console.log("call pulls.create:")
+                console.log(pulls_create_params)
+                github.pulls.create(pulls_create_params).then(create_res => {
+                  const release_users = ["nakkaa"]
+                  const pulls_create_review_request_params = {
+                    pull_number: create_res.data.number,
+                    reviewers: release_users,
+                    ...common_params
+                  }
+                  console.log("call pulls.createReviewRequest:")
+                  console.log(pulls_create_review_request_params)
+                  github.pulls.createReviewRequest(pulls_create_review_request_params)
+                  const issues_add_assignees_params = {
+                    issue_number: create_res.data.number,
+                    assignees: release_users,
+                    ...common_params
+                  }
+                  console.log("call issues.addAssignees:")
+                  console.log(issues_add_assignees_params)
+                  github.issues.addAssignees(issues_add_assignees_params)
+                })
+              }
+            })

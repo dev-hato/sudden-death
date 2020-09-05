@@ -445,7 +445,8 @@ jobs:
         run: |
           if [ ! -d setup ]
           then
-            exit 1
+            echo "Setup directory does not exist. So this job will be skipped."
+            exit 0
           fi
       - name: Set .env
         run: |

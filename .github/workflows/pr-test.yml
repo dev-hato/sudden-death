@@ -441,17 +441,19 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Exit if setup directory does not exist
+      - name: check exist setup directory
+        id: check_exist_setup
         run: |
           if [ ! -d setup ]
           then
-            echo "Setup directory does not exist. So this job will be skipped."
-            exit 0
+            exit 1
           fi
       - name: Set .env
+        if: steps.check_exist_setup.outcome == 'failure'
         run: |
           cp .env.example .env
       - name: Build docker image
+        if: steps.check_exist_setup.outcome == 'failure'
         run: |
           cd setup
           docker-compose build --no-cache

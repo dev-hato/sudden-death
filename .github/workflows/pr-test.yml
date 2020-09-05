@@ -442,18 +442,19 @@ jobs:
         with:
           fetch-depth: 0
       - name: check exist setup directory
-        id: check_exist_setup
         run: |
-          if [ ! -d setup ]
+          if [ -d setup ]
           then
-            exit 1
+            echo "::set-output name=is_exist_setup::true"
+          else
+            echo "::set-output name=is_exist_setup::false"
           fi
       - name: Set .env
-        if: steps.check_exist_setup.outcome == 'failure'
+        if: steps.lint.outputs.is_exist_setup == 'true'
         run: |
           cp .env.example .env
       - name: Build docker image
-        if: steps.check_exist_setup.outcome == 'failure'
+        if: steps.lint.outputs.is_exist_setup == 'true'
         run: |
           cd setup
           docker-compose build --no-cache

@@ -22,7 +22,7 @@ jobs:
             }
             const pull_params = {
               head: "dev-hato:pr-copy-ci",
-              base: "dev-hato:master",
+              base: "master",
               ...common_params
             }
             const pulls_list_params = {

@@ -433,7 +433,7 @@ jobs:
           WORKON_HOME: ""
           PYTHONPATH: "/github/workspace/:\
             /github/workflow/.venv/lib/python${{ matrix.python-version }}/site-packages"
-  
+
   pr-docker:
     runs-on: ubuntu-latest
 
@@ -441,7 +441,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: check exist setup directory
+      - name: Check exist setup directory
         run: |
           if [ -d setup ]
           then

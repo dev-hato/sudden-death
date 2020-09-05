@@ -199,7 +199,10 @@ jobs:
           pipenv install --dev
       - name: Set .env
         run: |
-          cp .env.example .env
+          if [ -e .env.example ]
+          then
+            cp .env.example .env
+          fi
       - name: Test
         run: |
           pipenv run python -m unittest
@@ -438,8 +441,14 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Set .env	
-        run: |	
+      - name: Exit if setup directory does not exist
+        run: |
+          if [ ! -d setup ]
+          then
+            exit 1
+          fi
+      - name: Set .env
+        run: |
           cp .env.example .env
       - name: Build docker image
         run: |

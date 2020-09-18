@@ -27,8 +27,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install pipenv
         run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-      - name: pipfile mv
-        run: mv Pipfile.lock-${{ matrix.python-version }} Pipfile.lock
+      - name: pipfile cp
+        run: cp Pipfile.lock-${{ matrix.python-version }} Pipfile.lock
       - name: pipenv cache
         uses: actions/cache@v2
         with:
@@ -165,8 +165,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install pipenv
         run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-      - name: pipfile mv
-        run: mv Pipfile.lock-${{ matrix.python-version }} Pipfile.lock
+      - name: pipfile cp
+        run: cp Pipfile.lock-${{ matrix.python-version }} Pipfile.lock
       - name: pipenv cache
         uses: actions/cache@v2
         with:
@@ -201,8 +201,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install pipenv
         run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-      - name: pipfile mv
-        run: mv Pipfile.lock-${{ matrix.python-version }} Pipfile.lock
+      - name: pipfile cp
+        run: cp Pipfile.lock-${{ matrix.python-version }} Pipfile.lock
       - name: pipenv cache
         uses: actions/cache@v2
         with:
@@ -290,8 +290,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install pipenv
         run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-      - name: pipfile mv
-        run: mv Pipfile.lock-${{ matrix.python-version }} Pipfile.lock
+      - name: pipfile cp
+        run: cp Pipfile.lock-${{ matrix.python-version }} Pipfile.lock
       - name: pipenv cache
         uses: actions/cache@v2
         with:
@@ -331,9 +331,10 @@ jobs:
         run: cp -r ${{ env.venv_path }} /home/runner/work/_temp/_github_workflow/.venv
 
       - name: Lint files
-        uses: docker://github/super-linter:v3.6.0
+        uses: docker://github/super-linter:v3.10.0
         env:
           VALIDATE_ALL_CODEBASE: true
+          VALIDATE_PYTHON_BLACK: false
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WORKON_HOME: ""
           PYTHONPATH: "/github/workspace/:\

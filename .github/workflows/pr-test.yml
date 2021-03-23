@@ -105,14 +105,16 @@ jobs:
                 console.log("call pulls.create:")
                 console.log(pulls_create_params)
                 github.pulls.create(pulls_create_params).then(create_res => {
-                  const issues_add_assignees_params = {
-                    issue_number: create_res.data.number,
-                    assignees: ["${{github.event.pull_request.user.login}}"],
-                    ...common_params
+                  if("${{github.event.pull_request.user.login}}" !== "dependabot[bot]") {
+                    const issues_add_assignees_params = {
+                      issue_number: create_res.data.number,
+                      assignees: ["${{github.event.pull_request.user.login}}"],
+                      ...common_params
+                    }
+                    console.log("call issues.addAssignees:")
+                    console.log(issues_add_assignees_params)
+                    github.issues.addAssignees(issues_add_assignees_params)
                   }
-                  console.log("call issues.addAssignees:")
-                  console.log(issues_add_assignees_params)
-                  github.issues.addAssignees(issues_add_assignees_params)
                 })
               }
             })
@@ -376,10 +378,12 @@ jobs:
         run: cp -r ${{ env.venv_path }} /home/runner/work/_temp/_github_workflow/.venv
 
       - name: Lint files
-        uses: docker://github/super-linter:v3.10.0
+        uses: docker://github/super-linter:v3.15.5
         env:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_PYTHON_BLACK: false
+          VALIDATE_JSCPD: false
+          VALIDATE_PYTHON_ISORT: false
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WORKON_HOME: ""
           PYTHONPATH: "/github/workspace/:\

@@ -10,4 +10,4 @@ mypy = "==0.812"
 
 [packages]
 pyperclip = ">=1.5.27"
-click = "==7.1.2"
+click = "==8.0.1"

@@ -7,6 +7,7 @@ verify_ssl = true
 pylint = "==2.9.3"
 autopep8 = "==1.5.7"
 mypy = "==0.910"
+types-click = "==7.1.2"
 
 [packages]
 pyperclip = ">=1.5.27"

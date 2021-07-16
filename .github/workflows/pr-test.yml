@@ -61,12 +61,12 @@ jobs:
         continue-on-error: true
       # 差分があったときは差分を出力する
       - name: Show diff
-        if: steps.format.outcome == 'failure'
+        if: ${{ steps.format.outcome == 'failure' }}
         run: |
           git diff
       # 差分があったときは、コミットを作りpushする
       - name: Push
-        if: github.event.pull_request.head.repo.full_name == github.repository && steps.format.outcome == 'failure'
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository && steps.format.outcome == 'failure' }}
         run: |
           git config user.name "hatohakaraage"
           git config user.email "hatohakaraage@example.com"
@@ -76,7 +76,7 @@ jobs:
       # pushしたブランチでPRを作る
       - name: Create PullRequest
         uses: actions/github-script@v4.0.2
-        if: github.event.pull_request.head.repo.full_name == github.repository && steps.format.outcome == 'failure'
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository && steps.format.outcome == 'failure' }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -121,7 +121,7 @@ jobs:
       # 既にformat修正のPRがある状態で、手動でformatを修正した場合、format修正のPRを閉じる
       - name: Close PullRequest
         uses: actions/github-script@v4.0.2
-        if: github.event.pull_request.head.repo.full_name == github.repository && steps.format.outcome != 'failure'
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository && steps.format.outcome != 'failure' }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -159,7 +159,7 @@ jobs:
               }
             })
       - name: Exit
-        if: steps.format.outcome == 'failure'
+        if: ${{ steps.format.outcome == 'failure' }}
         run: exit 1
 
   # 型ヒントのチェックを行う
@@ -206,108 +206,6 @@ jobs:
       - name: Check type hints
         run: |
           pipenv run mypy .
-
-  # lintを行い、結果をPRにコメントとして表示する。
-  # ここではチェックは落ちない
-  pr-lint:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.9]
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: "recursive"
-          fetch-depth: 0
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2.2.2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: pipenv cache
-        uses: actions/cache@v2.1.6
-        with:
-          key: ${{ hashFiles('./.github/workflows/pr-test.yml') }}-${{ runner.os }}-${{ matrix.python-version }}-Dockerfile-${{ hashFiles('./Dockerfile') }}-pipenv
-          path: ${{ env.WORKON_HOME }}
-          restore-keys: |
-            ${{ hashFiles('./.github/workflows/pr-test.yml') }}-${{ runner.os }}-${{ matrix.python-version }}-Dockerfile-${{ hashFiles('./Dockerfile') }}-pipenv
-            ${{ hashFiles('./.github/workflows/pr-test.yml') }}-${{ runner.os }}-${{ matrix.python-version }}-Dockerfile-
-      - name: Install pipenv
-        run: |
-          file_name=Dockerfile
-          package_name=pipenv
-
-          if [ -f ${file_name} ]
-          then
-            package_name_with_version=$(grep -oE "${package_name}[^ ]+" ${file_name})
-          else
-            package_name_with_version=${package_name}
-          fi
-
-          pip install ${package_name_with_version}
-      - name: pipenv version
-        run: pipenv --version
-      - name: Install dependencies
-        run: |
-          pipenv install --dev
-      # lintする
-      - name: Lint files
-        id: lint
-        run: |
-          result=$(pipenv run pylint --rcfile=.github/linters/.python-lint $(find . -iname "*.py") 2>&1) || true
-          echo "$result"
-          result="${result//'%'/'%25'}"
-          result="${result//$'\n'/'%0A'}"
-          result="${result//$'\r'/'%0D'}"
-          echo "::set-output name=result::$result"
-          true
-        continue-on-error: true
-      # lint結果をコメントに残す
-      - name: Lint Comment
-        if: github.event.pull_request.head.repo.full_name == github.repository && steps.lint.outputs.result != ''
-        uses: actions/github-script@v4.0.2
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const issues_listComments_params = {
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo
-            }
-            console.log("call issues.listComments:")
-            console.log(issues_listComments_params)
-            github.issues.listComments(issues_listComments_params).then(response =>
-              response.data.filter(
-                comment=>comment.user.id==41898282 && comment.body.startsWith('Lint結果')
-              ).map(
-                comment=>comment.id
-              ).forEach(
-                comment_id => {
-                  const issues_deleteComment_params = {
-                    comment_id: comment_id,
-                    owner: context.repo.owner,
-                    repo: context.repo.repo
-                  }
-                  console.log("call issues.deleteComment:")
-                  console.log(issues_deleteComment_params)
-                  github.issues.deleteComment(issues_deleteComment_params)
-                }
-              )
-            )
-
-            const result = `${{steps.lint.outputs.result}}`
-            const issues_createComment_params = {
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: "Lint結果だよ！🕊🕊🕊\n```\n"+result+"\n```"
-            }
-            console.log("call issues.createComment:")
-            console.log(issues_createComment_params)
-            github.issues.createComment(issues_createComment_params)
-      - name: Exit
-        if: github.event.pull_request.head.repo.full_name != github.repository && !contains(steps.lint.outputs.result, 'Your code has been rated at 10.00/10')
-        run: exit 1
 
   pr-super-lint:
     runs-on: ubuntu-latest
@@ -368,7 +266,7 @@ jobs:
         run: |
           venv_path=$(find ${{ env.WORKON_HOME }} -name "${GITHUB_REPOSITORY##*/}-*")
           echo "${venv_path}"
-          echo "venv_path=${venv_path}" >> $GITHUB_ENV
+          echo "venv_path=${venv_path}" >> "${GITHUB_ENV}"
 
         # https://github.com/github/super-linter/issues/157#issuecomment-648850330
         # -v "/home/runner/work/_temp/_github_workflow":"/github/workflow"
@@ -388,3 +286,12 @@ jobs:
           WORKON_HOME: ""
           PYTHONPATH: "/github/workspace/:\
             /github/workflow/.venv/lib/python${{ matrix.python-version }}/site-packages"
+
+  pr-actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run actionlint
+        run: |
+          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          ./actionlint -color

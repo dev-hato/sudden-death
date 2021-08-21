@@ -19,7 +19,7 @@ jobs:
           # submodule: 'recursive'
           fetch-depth: 0
       - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.3.0
+        uses: actions/setup-node@v2.4.0
         with:
           node-version: ${{ matrix.node-version }}
       - name: Get yarn cache directory path
@@ -51,7 +51,7 @@ jobs:
       # lint結果をコメントに残す
       - name: Lint Comment
         if: ${{ github.event.pull_request.head.repo.full_name == github.repository && steps.lint.outputs.result != '' }}
-        uses: actions/github-script@v4.0.2
+        uses: actions/github-script@v4.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -111,7 +111,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.3.0
+        uses: actions/setup-node@v2.4.0
         with:
           node-version: ${{ matrix.node-version }}
       - name: Get yarn cache directory path
@@ -150,7 +150,7 @@ jobs:
           git push -f https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:refs/heads/fix-text-${{github.event.pull_request.head.ref}}
       # pushしたブランチでPRを作る
       - name: Create PullRequest
-        uses: actions/github-script@v4.0.2
+        uses: actions/github-script@v4.1
         if: ${{ steps.show_diff.outputs.diff != '' }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -195,7 +195,7 @@ jobs:
             })
       # 既にformat修正のPRがある状態で、手動でformatを修正した場合、format修正のPRを閉じる
       - name: Close PullRequest
-        uses: actions/github-script@v4.0.2
+        uses: actions/github-script@v4.1
         if: ${{ steps.show_diff.outputs.diff == '' }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}

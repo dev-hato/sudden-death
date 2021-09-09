@@ -9,7 +9,7 @@ def _requires_from_file(filename):
     is_in_packages = False
     requires = []
 
-    with open(filename) as _f:
+    with open(filename, encoding='UTF-8') as _f:
         for _r in _f:
             _r = _r.strip()
             if _r == '[packages]':

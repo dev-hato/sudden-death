@@ -9,4 +9,3 @@ autopep8 = "==1.5.7"
 [packages]
 pyperclip = ">=1.5.27"
 click = "==7.1.2"
-slackeventsapi = "==2.2.1"

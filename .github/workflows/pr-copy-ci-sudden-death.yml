@@ -29,11 +29,10 @@ jobs:
               state: "open",
               ...pull_params
             }
-            console.log("call pulls.list:")
-            console.log(pulls_list_params)
-            const list_res = await github.pulls.list(pulls_list_params)
+            console.log("call pulls.list:", pulls_list_params)
+            const pulls = (await github.pulls.list(pulls_list_params)).data
 
-            if (0 < list_res.data.filter(data => data.user.id === 41898282).length) {
+            if (0 < pulls.filter(data => data.user.id === 41898282).length) {
               return
             }
 
@@ -42,6 +41,5 @@ jobs:
               body: "鳩の唐揚げおいしい！😋😋😋",
               ...pull_params
             }
-            console.log("call pulls.create:")
-            console.log(pulls_create_params)
+            console.log("call pulls.create:, pulls_create_params)
             await github.pulls.create(pulls_create_params)

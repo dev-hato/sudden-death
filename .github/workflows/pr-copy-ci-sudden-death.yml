@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get pull requests
+      - name: Get PullRequests
         uses: actions/github-script@v3
         id: get_pull_requests
         with:

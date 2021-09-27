@@ -41,5 +41,5 @@ jobs:
               title: "hato-botのCIを反映するよ！",
               body: "鳩の唐揚げおいしい！😋😋😋"
             }
-            console.log("call pulls.create:, pulls_create_params)
+            console.log("call pulls.create:", pulls_create_params)
             await github.pulls.create(pulls_create_params)

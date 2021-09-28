@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Get PullRequests
-        uses: actions/github-script@v3
+        uses: actions/github-script@v5
         id: get_pull_requests
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -25,10 +25,10 @@ jobs:
               state: "open"
             }
             console.log("call pulls.list:", pulls_list_params)
-            const pulls = await github.paginate(github.pulls.list, pulls_list_params)
+            const pulls = await github.paginate(github.rest.pulls.list, pulls_list_params)
             return pulls.filter(data => data.user.id === 41898282).length
       - name: Create PullRequest
-        uses: actions/github-script@v3
+        uses: actions/github-script@v5
         if: ${{ steps.get_pull_requests.outputs.result == 0 }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -42,4 +42,4 @@ jobs:
               body: "鳩の唐揚げおいしい！😋😋😋"
             }
             console.log("call pulls.create:", pulls_create_params)
-            await github.pulls.create(pulls_create_params)
+            await github.rest.pulls.create(pulls_create_params)

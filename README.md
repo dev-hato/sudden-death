@@ -21,7 +21,9 @@ pipenv run python sd.py メッセージ
 
 ## コミットする前に行うこと
 
-誤ってクレデンシャルをコミットしないよう、 <https://pre-commit.com/> の手順に従って `pre-commit` をインストールします。
+<https://pre-commit.com/> の手順に従って `pre-commit` をインストールします。　
+
+これにより、コミット時にクレデンシャルが含まれていないかの検査が行われるようになります ([gitleaks](https://github.com/zricethezav/gitleaks)使用)。
 
 ## License
 

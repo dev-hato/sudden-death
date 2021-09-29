@@ -21,9 +21,9 @@ pipenv run python sd.py メッセージ
 
 ## コミットする前に行うこと
 
-<https://pre-commit.com/> の手順に従って `pre-commit` をインストールします。
-
-これにより、コミット時にクレデンシャルが含まれていないかの検査が行われるようになります ( `pre-commit` の設定は [.pre-commit-config.yaml](.pre-commit-config.yaml) 参照)。
+<https://pre-commit.com/> の手順に従って `pre-commit` をインストールします。  
+これにより、コミット時にクレデンシャルが含まれていないかの検査が行われるようになります。  
+`pre-commit` の設定は [.pre-commit-config.yaml](.pre-commit-config.yaml) を参照してください。
 
 ## License
 

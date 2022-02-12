@@ -9,3 +9,6 @@ autopep8 = "==1.6.0"
 [packages]
 pyperclip = ">=1.5.27"
 click = "==8.0.3"
+
+[requires]
+python_version = "3.9.10"

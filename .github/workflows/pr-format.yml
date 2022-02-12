@@ -1,12 +1,13 @@
 ---
-name: pr-check-yarn
+name: pr-format
 
+# pull_requestで何かあった時に起動する
 on:
   pull_request:
 
 jobs:
-  # package.jsonかyarn.lockに差分があれば、package.jsonからyarn.lockを作り出す
-  pr-check-yarn:
+  # PRが来たらformatをかけてみて、差分があればPRを作って、エラーで落ちるjob
+  pr-format:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,21 +17,60 @@ jobs:
           # submodule: 'recursive'
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
-      - run: echo "NODE_VERSION=16" >> "${GITHUB_ENV}"
-      - name: Set up Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2.5.1
+      - run: echo "PYTHON_VERSION=$(cat .python-version)" >> "${GITHUB_ENV}"
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v2.3.2
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: yarn
+          python-version: ${{env.PYTHON_VERSION }}
+          cache: pipenv
+      - name: Install pipenv
+        id: install_pipenv
+        continue-on-error: true
+        run: |
+          file_name=Dockerfile
+          package_name=pipenv
+
+          if [ -f ${file_name} ]
+          then
+            PATTERN="${package_name}[^ ]+"
+            package_name_with_version=$(grep -oE "${PATTERN}" ${file_name})
+          else
+            package_name_with_version=${package_name}
+          fi
+
+          pip install ${package_name_with_version}
+
+          if [ -f ${file_name} ]
+          then
+            new_version="$(pip list --outdated | grep pipenv || true)"
+            new_version="$(echo -e "${new_version}" | awk '{print $3}')"
+            if [ -n "${new_version}" ]
+            then
+              PATTERN_BEFORE="${package_name}[^ ]+"
+              PATTERN_AFTER="${package_name}==${new_version}"
+              sed -i -E "s/${PATTERN_BEFORE}/${PATTERN_AFTER}/g" ${file_name}
+              pip install "${package_name}==${new_version}"
+              exit 1
+            fi
+          fi
+      - name: pipenv version
+        run: pipenv --version
       - name: Install dependencies
         run: |
-          yarn install -D
+          pipenv install --dev
+      # autopep8でformatする
+      # --exit-codeをつけることで、autopep8内でエラーが起きれば1、差分があれば2のエラーステータスコードが返ってくる。正常時は0が返る
+      - name: Format files
+        id: format
+        run: |
+          pipenv run autopep8 --exit-code --in-place --recursive .
+        continue-on-error: true
       # 差分があったときは差分を出力する
       - name: Show diff
-        id: diff
+        if: ${{ steps.install_pipenv.outcome == 'failure'
+          || steps.format.outcome == 'failure' }}
         run: |
-          result=$(git diff)
-          echo "::set-output name=result::$result"
+          git diff
       - run: |
           REPO_NAME="${{ github.event.pull_request.head.repo.full_name }}"
           echo "REPO_NAME=${REPO_NAME}" >> "${GITHUB_ENV}"
@@ -39,7 +79,8 @@ jobs:
         env:
           HEAD_REF: ${{github.event.pull_request.head.ref}}
         if: ${{ env.REPO_NAME == github.repository
-          && steps.diff.outputs.result != '' }}
+          && (steps.install_pipenv.outcome == 'failure'
+          || steps.format.outcome == 'failure') }}
         run: |
           git config user.name "github-actions[bot]"
           EMAIL="41898282+github-actions[bot]@users.noreply.github.com"
@@ -49,25 +90,24 @@ jobs:
           REPO_URL="https://"
           REPO_URL+="${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/"
           REPO_URL+="${{github.repository}}.git"
-          GITHUB_HEAD="HEAD:refs/heads/yarn-${HEAD_REF}"
+          GITHUB_HEAD="HEAD:refs/heads/fix-format-${HEAD_REF}"
           git push -f "${REPO_URL}" "${GITHUB_HEAD}"
       - name: Get PullRequests
         uses: actions/github-script@v6
         env:
           HEAD_REF: ${{github.event.pull_request.head.ref}}
         if: ${{ env.REPO_NAME == github.repository
-          && steps.diff.outputs.result != '' }}
+          && (steps.install_pipenv.outcome == 'failure'
+          || steps.format.outcome == 'failure') }}
         id: get_pull_requests
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const HEAD_REF = process.env["HEAD_REF"]
-            let head = "${{github.event.pull_request.head.repo.owner.login}}"
-            head += ":yarn-" + HEAD_REF
             const pulls_list_params = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head,
+              head: "dev-hato:fix-format-" + HEAD_REF,
               base: HEAD_REF,
               state: "open"
             }
@@ -81,22 +121,21 @@ jobs:
         env:
           HEAD_REF: ${{github.event.pull_request.head.ref}}
         if: ${{ env.REPO_NAME == github.repository
-          && steps.diff.outputs.result != ''
+          && (steps.install_pipenv.outcome == 'failure'
+          || steps.format.outcome == 'failure')
           && steps.get_pull_requests.outputs.result == 0 }}
         id: create_pull_request
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const HEAD_REF = process.env["HEAD_REF"]
-            let head = "${{github.event.pull_request.head.repo.owner.login}}"
-            head += ":yarn-" + HEAD_REF
             const number = "#${{github.event.pull_request.number}}"
-            let title = "package.jsonやyarn.lockが更新されたので直してあげたよ！PRをマージしてね！ "
+            let title = "formatが間違ってたので直してあげたよ！PRをマージしてね！ "
             title += number
             const pulls_create_params = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head,
+              head: "dev-hato:fix-format-" + HEAD_REF,
               base: HEAD_REF,
               title,
               body: "鳩の唐揚げおいしい！😋😋😋 " + number
@@ -109,7 +148,8 @@ jobs:
       - name: Assign a user
         uses: actions/github-script@v6
         if: ${{ env.REPO_NAME == github.repository
-          && steps.diff.outputs.result != ''
+          && (steps.install_pipenv.outcome == 'failure'
+          || steps.format.outcome == 'failure')
           && steps.get_pull_requests.outputs.result == 0
           && github.event.pull_request.user.login != 'dependabot[bot]' }}
         with:
@@ -124,27 +164,25 @@ jobs:
             console.log("call issues.addAssignees:")
             console.log(issues_add_assignees_params)
             await github.rest.issues.addAssignees(issues_add_assignees_params)
-      # 既にpackage.json, yarn.lock修正のPRがある状態で、
-      # 手動でpackage.json, yarn.lockを修正した場合、修正のPRを閉じる
+      # 既にformat修正のPRがある状態で、手動でformatを修正した場合、format修正のPRを閉じる
       - name: Close PullRequest
         uses: actions/github-script@v6
         env:
           HEAD_REF: ${{github.event.pull_request.head.ref}}
         if: ${{ env.REPO_NAME == github.repository
-          && steps.diff.outputs.result == '' }}
+          && (steps.install_pipenv.outcome != 'failure'
+          && steps.format.outcome != 'failure') }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const HEAD_REF = process.env["HEAD_REF"]
-            const head_name = "yarn-" + HEAD_REF
+            const head_name = "fix-format-" + HEAD_REF
             const common_params = {
               owner: context.repo.owner,
               repo: context.repo.repo
             }
-            let head = "${{github.event.pull_request.head.repo.owner.login}}:"
-            head += head_name
             const pulls_list_params = {
-              head,
+              head: "dev-hato:" + head_name,
               base: HEAD_REF,
               state: "open",
               ...common_params
@@ -153,9 +191,9 @@ jobs:
             const pulls = await github.paginate(github.rest.pulls.list,
                                                 pulls_list_params)
 
-            for (const pull of pulls) {
+            for(const data of pulls) {
               const pulls_update_params = {
-                pull_number: pull.number,
+                pull_number: data.number,
                 state: "closed",
                 ...common_params
               }
@@ -169,5 +207,6 @@ jobs:
               await github.rest.git.deleteRef(git_deleteRef_params)
             }
       - name: Exit
-        if: ${{ steps.diff.outputs.result != '' }}
+        if: ${{ steps.install_pipenv.outcome == 'failure'
+          || steps.format.outcome == 'failure' }}
         run: exit 1

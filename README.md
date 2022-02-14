@@ -8,7 +8,7 @@
 
 ## Requirements
 
-- Python 3.5 over
+- Python 3.9.10
 - ```pipenv install```
 
 ## Usage

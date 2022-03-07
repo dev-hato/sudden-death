@@ -11,6 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set org name
+        uses: actions/github-script@v6
+        id: set_org_name
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          result-encoding: string
+          script:
+            return process.env.GITHUB_REPOSITORY.split('/')[0]
       - name: Get PullRequests
         uses: actions/github-script@v5
         id: get_pull_requests
@@ -20,7 +28,7 @@ jobs:
             const pulls_list_params = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: "dev-hato:pr-copy-ci",
+              head: "${{steps.set_org_name.outputs.result}}:pr-copy-ci",
               base: "master",
               state: "open"
             }
@@ -36,7 +44,7 @@ jobs:
             const pulls_create_params = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: "dev-hato:pr-copy-ci",
+              head: "${{steps.set_org_name.outputs.result}}:pr-copy-ci",
               base: "master",
               title: "hato-botのCIを反映するよ！",
               body: "鳩の唐揚げおいしい！😋😋😋"

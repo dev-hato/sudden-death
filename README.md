@@ -8,8 +8,9 @@
 
 ## Requirements
 
-- Python 3.9.10
+- Python 3.10.2
 - ```pipenv install```
+- ```yarn install```
 
 ## Usage
 
@@ -17,6 +18,12 @@ sd.pyを実行することで次に入力した文字が吹き出しになって
 
 ```sh
 pipenv run python sd.py メッセージ
+```
+
+## lintをかける方法
+
+```sh
+yarn run lint
 ```
 
 ## コミットする前に行うこと

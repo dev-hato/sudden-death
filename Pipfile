@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 autopep8 = "==1.6.0"
 pylint = "==2.12.2"
-mypy = "==0.931"
+mypy = "==0.940"
 
 [packages]
 pyperclip = ">=1.5.27"

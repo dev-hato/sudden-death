@@ -113,8 +113,7 @@ jobs:
             console.log("call issues.addAssignees:")
             console.log(issues_add_assignees_params)
             await github.rest.issues.addAssignees(issues_add_assignees_params)
-      # 既にpackage.json, yarn.lock修正のPRがある状態で、
-      # 手動でpackage.json, yarn.lockを修正した場合、修正のPRを閉じる
+      # READMEを修正した場合、修正のPRを閉じる
       - name: Close PullRequest
         uses: actions/github-script@v6
         env:

@@ -38,7 +38,7 @@ jobs:
           REPO_URL="https://"
           REPO_URL+="${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/"
           REPO_URL+="${{github.repository}}.git"
-          GITHUB_HEAD="HEAD:refs/heads/yarn-${HEAD_REF}"
+          GITHUB_HEAD="HEAD:refs/heads/readme-${HEAD_REF}"
           git push -f "${REPO_URL}" "${GITHUB_HEAD}"
       - name: Get PullRequests
         uses: actions/github-script@v6
@@ -52,7 +52,7 @@ jobs:
           script: |
             const HEAD_REF = process.env["HEAD_REF"]
             let head = "${{github.event.pull_request.head.repo.owner.login}}"
-            head += ":yarn-" + HEAD_REF
+            head += ":readme-" + HEAD_REF
             const pulls_list_params = {
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -78,7 +78,7 @@ jobs:
           script: |
             const HEAD_REF = process.env["HEAD_REF"]
             let head = "${{github.event.pull_request.head.repo.owner.login}}"
-            head += ":yarn-" + HEAD_REF
+            head += ":readme-" + HEAD_REF
             const number = "#${{github.event.pull_request.number}}"
             let title = "READMEの記述を直してあげたよ！PRをマージしてね！ "
             title += number
@@ -125,7 +125,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const HEAD_REF = process.env["HEAD_REF"]
-            const head_name = "yarn-" + HEAD_REF
+            const head_name = "readme-" + HEAD_REF
             const common_params = {
               owner: context.repo.owner,
               repo: context.repo.repo

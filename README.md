@@ -8,7 +8,7 @@
 
 ## Requirements
 
-- Python 3.10.3
+- Python 3.10.4
 - ```pipenv install```
 - ```yarn install```
 

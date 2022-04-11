@@ -6,6 +6,7 @@
 """
 
 import unicodedata
+
 import click
 import pyperclip
 

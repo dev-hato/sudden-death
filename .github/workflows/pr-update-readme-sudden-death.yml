@@ -3,6 +3,10 @@ name: pr-update-readme-sudden-death
 on:
   pull_request:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   pr-update-readme:
     runs-on: ubuntu-latest

@@ -1,7 +1,6 @@
 ---
-name: pr-format
+name: pr-update-pre-commit-config
 
-# pull_requestで何かあった時に起動する
 on:
   pull_request:
 
@@ -10,72 +9,57 @@ permissions:
   pull-requests: write
 
 jobs:
-  # PRが来たらformatをかけてみて、差分があればPRを作って、エラーで落ちるjob
-  pr-format:
+  update-pre-commit-config:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
         with:
-          # ここでsubmodule持ってくるとdetached headにcommitして死ぬ
-          # submodule: 'recursive'
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
-      - run: echo "PYTHON_VERSION=$(cat .python-version)" >> "${GITHUB_ENV}"
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v3
+      - name: Install packages
+        run: yarn add js-yaml
+      - name: Update .pre-commit-config.yaml
+        uses: actions/github-script@v6
         with:
-          python-version: ${{env.PYTHON_VERSION }}
-          cache: pipenv
-      - name: Install pipenv
-        id: install_pipenv
-        continue-on-error: true
-        run: |
-          file_name=Dockerfile
-          package_name=pipenv
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs')
+            const yaml = require('js-yaml')
 
-          if [ -f ${file_name} ]
-          then
-            PATTERN="${package_name}[^ ]+"
-            package_name_with_version=$(grep -oE "${PATTERN}" ${file_name})
-          else
-            package_name_with_version=${package_name}
-          fi
+            const config_filename = '.pre-commit-config.yaml'
+            const config = yaml.load(fs.readFileSync(config_filename, 'utf8'))
+            const common_params = {
+                owner: 'zricethezav',
+                repo: 'gitleaks'
+            }
+            console.log("call repos.getLatestRelease:", common_params)
+            const latest_release = await github.rest.repos.getLatestRelease(
+                                     common_params
+                                   )
+            config.repos = config.repos.map(repo => {
+                let repo_name = 'https://github.com/'
+                repo_name += common_params.owner + '/' + common_params.repo
 
-          pip install ${package_name_with_version}
+                if (repo.repo === repo_name) {
+                    repo.rev = latest_release.data.tag_name
+                }
 
-          if [ -f ${file_name} ]
-          then
-            new_version="$(pip list --outdated | grep pipenv || true)"
-            new_version="$(echo -e "${new_version}" | awk '{print $3}')"
-            if [ -n "${new_version}" ]
-            then
-              PATTERN_BEFORE="${package_name}[^ ]+"
-              PATTERN_AFTER="${package_name}==${new_version}"
-              sed -i -E "s/${PATTERN_BEFORE}/${PATTERN_AFTER}/g" ${file_name}
-              pip install "${package_name}==${new_version}"
-              exit 1
-            fi
-          fi
-      - name: pipenv version
-        run: pipenv --version
-      - name: Install dependencies
-        run: |
-          pipenv install --dev
-          pipenv lock
-      # autopep8でformatする
-      # --exit-codeをつけることで、autopep8内でエラーが起きれば1、差分があれば2のエラーステータスコードが返ってくる。正常時は0が返る
-      - name: Format files
-        id: format
-        run: |
-          pipenv run autopep8 --exit-code --in-place --recursive .
-        continue-on-error: true
+                return repo;
+            })
+            const content = '---\n' + yaml.dump(config)
+
+            try {
+                fs.writeFileSync(config_filename, content, 'utf8')
+            } catch (err) {
+                console.error(err.message)
+                process.exit(1)
+            }
       # 差分があったときは差分を出力する
       - name: Show diff
-        if: ${{ steps.install_pipenv.outcome == 'failure'
-          || steps.format.outcome == 'failure' }}
+        id: diff
         run: |
-          git diff
+          result=$(git diff .pre-commit-config.yaml)
+          echo "::set-output name=result::$result"
       - run: |
           REPO_NAME="${{ github.event.pull_request.head.repo.full_name }}"
           echo "REPO_NAME=${REPO_NAME}" >> "${GITHUB_ENV}"
@@ -84,18 +68,17 @@ jobs:
         env:
           HEAD_REF: ${{github.event.pull_request.head.ref}}
         if: ${{ env.REPO_NAME == github.repository
-          && (steps.install_pipenv.outcome == 'failure'
-          || steps.format.outcome == 'failure') }}
+          && steps.diff.outputs.result != '' }}
         run: |
           git config user.name "github-actions[bot]"
           EMAIL="41898282+github-actions[bot]@users.noreply.github.com"
           git config user.email "${EMAIL}"
-          git add -u
+          git add .pre-commit-config.yaml
           git commit -m "鳩は唐揚げ！(自動で直してあげたよ！)"
           REPO_URL="https://"
           REPO_URL+="${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/"
           REPO_URL+="${{github.repository}}.git"
-          GITHUB_HEAD="HEAD:refs/heads/fix-format-${HEAD_REF}"
+          GITHUB_HEAD="HEAD:refs/heads/fix-version-pre-commit-config-${HEAD_REF}"
           git push -f "${REPO_URL}" "${GITHUB_HEAD}"
       - name: Set org name
         uses: actions/github-script@v6
@@ -111,8 +94,7 @@ jobs:
         env:
           HEAD_REF: ${{github.event.pull_request.head.ref}}
         if: ${{ env.REPO_NAME == github.repository
-          && (steps.install_pipenv.outcome == 'failure'
-          || steps.format.outcome == 'failure') }}
+          && steps.diff.outputs.result != '' }}
         id: get_pull_requests
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -121,7 +103,7 @@ jobs:
             const pulls_list_params = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: "${{steps.set_org_name.outputs.result}}:fix-format-" + HEAD_REF,
+              head: "${{steps.set_org_name.outputs.result}}:fix-version-pre-commit-config-" + HEAD_REF,
               base: HEAD_REF,
               state: "open"
             }
@@ -135,8 +117,7 @@ jobs:
         env:
           HEAD_REF: ${{github.event.pull_request.head.ref}}
         if: ${{ env.REPO_NAME == github.repository
-          && (steps.install_pipenv.outcome == 'failure'
-          || steps.format.outcome == 'failure')
+          && steps.diff.outputs.result != ''
           && steps.get_pull_requests.outputs.result == 0 }}
         id: create_pull_request
         with:
@@ -144,12 +125,12 @@ jobs:
           script: |
             const HEAD_REF = process.env["HEAD_REF"]
             const number = "#${{github.event.pull_request.number}}"
-            let title = "formatが間違ってたので直してあげたよ！PRをマージしてね！ "
+            let title = ".pre-commit-config.yamlを直してあげたよ！PRをマージしてね！ "
             title += number
             const pulls_create_params = {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: "${{steps.set_org_name.outputs.result}}:fix-format-" + HEAD_REF,
+              head: "${{steps.set_org_name.outputs.result}}:fix-version-pre-commit-config-" + HEAD_REF,
               base: HEAD_REF,
               title,
               body: "鳩の唐揚げおいしい！😋😋😋 " + number
@@ -162,8 +143,7 @@ jobs:
       - name: Assign a user
         uses: actions/github-script@v6
         if: ${{ env.REPO_NAME == github.repository
-          && (steps.install_pipenv.outcome == 'failure'
-          || steps.format.outcome == 'failure')
+          && steps.diff.outputs.result != ''
           && steps.get_pull_requests.outputs.result == 0
           && github.event.pull_request.user.login != 'dependabot[bot]' }}
         with:
@@ -184,13 +164,12 @@ jobs:
         env:
           HEAD_REF: ${{github.event.pull_request.head.ref}}
         if: ${{ env.REPO_NAME == github.repository
-          && (steps.install_pipenv.outcome != 'failure'
-          && steps.format.outcome != 'failure') }}
+          && steps.diff.outputs.result == '' }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const HEAD_REF = process.env["HEAD_REF"]
-            const head_name = "fix-format-" + HEAD_REF
+            const head_name = "fix-version-pre-commit-config-" + HEAD_REF
             const common_params = {
               owner: context.repo.owner,
               repo: context.repo.repo
@@ -205,9 +184,9 @@ jobs:
             const pulls = await github.paginate(github.rest.pulls.list,
                                                 pulls_list_params)
 
-            for(const data of pulls) {
+            for (const pull of pulls) {
               const pulls_update_params = {
-                pull_number: data.number,
+                pull_number: pull.number,
                 state: "closed",
                 ...common_params
               }
@@ -221,6 +200,5 @@ jobs:
               await github.rest.git.deleteRef(git_deleteRef_params)
             }
       - name: Exit
-        if: ${{ steps.install_pipenv.outcome == 'failure'
-          || steps.format.outcome == 'failure' }}
+        if: ${{ steps.diff.outputs.result != '' }}
         run: exit 1

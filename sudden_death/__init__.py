@@ -17,7 +17,7 @@ def text_len(text: str) -> int:
     """
     count = 0
     for character in text:
-        count += 2 if unicodedata.east_asian_width(character) in 'FWA' else 1
+        count += 2 if unicodedata.east_asian_width(character) in "FWA" else 1
     return count
 
 
@@ -28,30 +28,30 @@ def generator(msg: str) -> str:
     ￣^Y^Y^Y^Y^Y^Y^Y￣
     を作る
     """
-    messages = msg.split('\n')
+    messages = msg.split("\n")
     length = list(map(text_len, messages))
     max_length = max(length)
 
-    generating = '＿人'
+    generating = "＿人"
     for _ in range(max_length // 2):
-        generating += '人'
+        generating += "人"
 
-    generating += '人＿\n'
+    generating += "人＿\n"
 
     for leng, message in zip(length, messages):
-        padding = ' ' * ((max_length - leng) // 2)
-        generating += '＞  ' + padding + message + padding + '  ＜\n'
+        padding = " " * ((max_length - leng) // 2)
+        generating += "＞  " + padding + message + padding + "  ＜\n"
 
-    generating += '￣^Y'
+    generating += "￣^Y"
 
     for _ in range(max_length // 2):
-        generating += '^Y'
-    generating += '^Y￣'
+        generating += "^Y"
+    generating += "^Y￣"
     return generating
 
 
 @click.command()
-@click.argument('msg')
+@click.argument("msg")
 def cmd(msg: str = "") -> None:
     """
     コマンド
@@ -68,5 +68,5 @@ def main() -> None:
     cmd()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

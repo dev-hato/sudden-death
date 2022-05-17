@@ -33,7 +33,7 @@ def generator(msg: str) -> str:
     max_length = max(length)
 
     generating = '＿人'
-    for _ in range(max_length//2):
+    for _ in range(max_length // 2):
         generating += '人'
 
     generating += '人＿\n'
@@ -44,7 +44,7 @@ def generator(msg: str) -> str:
 
     generating += '￣^Y'
 
-    for _ in range(max_length//2):
+    for _ in range(max_length // 2):
         generating += '^Y'
     generating += '^Y￣'
     return generating

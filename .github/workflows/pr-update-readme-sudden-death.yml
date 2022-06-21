@@ -2,6 +2,9 @@ name: pr-update-readme-sudden-death
 
 on:
   pull_request:
+  push:
+    branches:
+      - master
 
 permissions:
   contents: write

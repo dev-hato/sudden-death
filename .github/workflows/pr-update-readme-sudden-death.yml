@@ -26,3 +26,4 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           branch-name-prefix: readme
           pr-title-prefix: READMEの記述を直してあげたよ！
+          repo-name: ${{ github.event.pull_request.head.repo.full_name }}

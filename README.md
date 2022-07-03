@@ -10,7 +10,7 @@
 
 - Python 3.10.5
 - ```pipenv install```
-- ```yarn install```
+- ```npm install```
 
 ## Usage
 
@@ -23,7 +23,7 @@ pipenv run python sd.py メッセージ
 ## lintをかける方法
 
 ```sh
-yarn run lint
+npm run lint
 ```
 
 ## コミットする前に行うこと

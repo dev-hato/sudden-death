@@ -1,2 +1,4 @@
 *.ipynb
 .vscode
+
+node_modules

@@ -28,4 +28,4 @@ jobs:
       - uses: dev-hato/actions-format-json-yml@v0.0.4
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
-          repo-name: dev-hato/hato-bot
+          repo-name: dev-hato/sudden-death

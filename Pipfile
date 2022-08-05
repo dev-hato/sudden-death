@@ -7,6 +7,7 @@ verify_ssl = true
 autopep8 = "==1.6.0"
 pylint = "==2.14.5"
 mypy = "==0.971"
+flake8 = "*"
 
 [packages]
 pyperclip = ">=1.5.27"

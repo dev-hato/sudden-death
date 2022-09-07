@@ -5,7 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 autopep8 = "==1.7.0"
-pylint = "==2.15.0"
+pylint = "==2.15.2"
 mypy = "==0.971"
 flake8 = "*"
 

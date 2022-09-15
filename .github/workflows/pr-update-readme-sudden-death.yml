@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       - run: sed -i -e "s/Python [0-9.]*/Python $(cat .python-version)/g" README.md
-      - uses: dev-hato/actions-diff-pr-management@v1.0.3
+      - uses: dev-hato/actions-diff-pr-management@v1.0.4
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           branch-name-prefix: readme

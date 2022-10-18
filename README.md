@@ -8,7 +8,7 @@
 
 ## Requirements
 
-- Python 3.10.7
+- Python 3.10.8
 - ```pipenv install```
 - ```npm install```
 

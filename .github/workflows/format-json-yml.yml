@@ -25,7 +25,6 @@ jobs:
       - uses: dev-hato/actions-format-json-yml@v0.0.29
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
-          repo-name: dev-hato/sudden-death
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true

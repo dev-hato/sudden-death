@@ -12,5 +12,6 @@
       ],
       "enabled": false
     }
-  ]
+  ],
+  "forkProcessing": "enabled"
 }

@@ -1,9 +1,7 @@
 name: pr-copy-ci-sudden-death
 
 on:
-  push:
-    branches:
-      - pr-copy-ci
+  pull_request:
 
 jobs:
   # hato-botのCIの差分がpushされたらPRを作成する
@@ -12,34 +10,36 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3.5.3
+        with:
+          fetch-depth: 0
+          path: sudden-death
       - name: Set org name
         uses: actions/github-script@v6.4.1
         id: set_org_name
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           result-encoding: string
-          script:
-            return process.env.GITHUB_REPOSITORY.split('/')[0]
-      - name: Get PullRequests
+          script: return process.env.GITHUB_REPOSITORY.split('/')[0]
+      - uses: actions/checkout@v3.5.3
+        with:
+          fetch-depth: 0
+          repository: ${{steps.set_org_name.outputs.result}}/hato-bot
+          path: hato-bot
+      - name: Copy CI
+        run: bash "${GITHUB_WORKSPACE}/sudden-death/scripts/pr_copy_ci_sudden_death/pr_copy_ci/copy_ci.sh"
+      - name: Copy package.json
         uses: actions/github-script@v6.4.1
-        id: get_pull_requests
-        env:
-          ORG_NAME: ${{steps.set_org_name.outputs.result}}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const script = require(`${process.env.GITHUB_WORKSPACE}/scripts/pr_copy_ci_sudden_death/pr_copy_ci/get_pull_requests.js`)
-            return await script({github, context})
-      - name: Create PullRequest
-        uses: actions/github-script@v6.4.1
-        if: ${{ steps.get_pull_requests.outputs.result == 0 }}
-        env:
-          ORG_NAME: ${{steps.set_org_name.outputs.result}}
+            const script = require(`${process.env.GITHUB_WORKSPACE}/sudden-death/scripts/pr_copy_ci_sudden_death/pr_copy_ci/copy_package.js`)
+            script()
+      - uses: dev-hato/actions-diff-pr-management@massongit-patch-1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const script = require(`${process.env.GITHUB_WORKSPACE}/scripts/pr_copy_ci_sudden_death/pr_copy_ci/create_pull_request.js`)
-            await script({github, context})
+          branch-name-prefix: pr-copy-ci
+          pr-title-prefix: hato-botのCIを反映するよ！
+          working-directory: sudden-death
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}

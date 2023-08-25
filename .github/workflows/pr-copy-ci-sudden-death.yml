@@ -14,6 +14,7 @@ jobs:
           fetch-depth: 0
           path: sudden-death
           ref: ${{ github.sha }}
+          token: ${{secrets.CREATE_WORKFLOW_CI_TOKEN}}
       - name: Set org name
         uses: actions/github-script@v6.4.1
         id: set_org_name
@@ -37,7 +38,7 @@ jobs:
             script()
       - uses: dev-hato/actions-diff-pr-management@v1.1.6
         with:
-          github-token: ${{secrets.CREATE_WORKFLOW_CI_TOKEN}}
+          github-token: ${{secrets.GITHUB_TOKEN}}
           branch-name-prefix: pr-copy-ci
           pr-title-prefix: hato-botのCIを反映するよ！
           working-directory: sudden-death

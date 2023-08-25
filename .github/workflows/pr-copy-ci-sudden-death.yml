@@ -1,8 +1,7 @@
 name: pr-copy-ci-sudden-death
 
 on:
-  repository_dispatch:
-    types: pr-copy-ci
+  workflow_dispatch:
 
 jobs:
   # hato-botのCIの差分がpushされたらPRを作成する

@@ -1,13 +1,10 @@
 name: pr-copy-ci-sudden-death
-
 on:
   workflow_dispatch:
-
 jobs:
   # hato-botのCIの差分がpushされたらPRを作成する
   pr-copy-ci:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3.6.0
         with:
@@ -43,7 +40,6 @@ jobs:
           pr-title-prefix: hato-botのCIを反映するよ！
           working-directory: sudden-death
           exit-failure: 'false'
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true

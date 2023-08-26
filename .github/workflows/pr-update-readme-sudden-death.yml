@@ -1,5 +1,4 @@
 name: pr-update-readme-sudden-death
-
 on:
   pull_request:
     types:
@@ -10,11 +9,9 @@ on:
   push:
     branches:
       - master
-
 permissions:
   contents: write
   pull-requests: write
-
 jobs:
   pr-update-readme:
     runs-on: ubuntu-latest
@@ -33,7 +30,6 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           branch-name-prefix: readme
           pr-title-prefix: READMEの記述を直してあげたよ！
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true

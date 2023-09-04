@@ -6,7 +6,7 @@ jobs:
   pr-copy-ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.6.0
+      - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
         with:
           fetch-depth: 0
           path: sudden-death
@@ -19,7 +19,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           result-encoding: string
           script: return process.env.GITHUB_REPOSITORY.split('/')[0]
-      - uses: actions/checkout@v3.6.0
+      - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
         with:
           fetch-depth: 0
           repository: ${{steps.set_org_name.outputs.result}}/hato-bot

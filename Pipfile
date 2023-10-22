@@ -5,7 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 autopep8 = "==2.0.4"
-pylint = "==3.0.1"
+pylint = "==3.0.2"
 mypy = "==1.6.1"
 flake8 = "==6.1.0"
 importlib-metadata = "==6.8.0"

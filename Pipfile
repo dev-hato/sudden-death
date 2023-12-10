@@ -11,11 +11,11 @@ flake8 = "==6.1.0"
 importlib-metadata = "==7.0.0"
 toml = "==0.10.2"
 types-toml = "==0.10.8.7"
+setuptools = "==69.0.2"
 
 [packages]
 pyperclip = ">=1.5.27"
 click = "==8.1.7"
-setuptools = "==69.0.2"
 
 [requires]
 python_version = "3.12"

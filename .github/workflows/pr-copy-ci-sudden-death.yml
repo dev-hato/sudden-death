@@ -36,7 +36,7 @@ jobs:
           script: |
             const script = require(`${process.env.GITHUB_WORKSPACE}/sudden-death/scripts/pr_copy_ci_sudden_death/pr_copy_ci/copy_package.js`)
             script()
-      - uses: dev-hato/actions-diff-pr-management@v1.1.7
+      - uses: dev-hato/actions-diff-pr-management@v1.1.8
         with:
           github-token: ${{secrets.CREATE_WORKFLOW_CI_TOKEN}}
           branch-name-prefix: pr-copy-ci

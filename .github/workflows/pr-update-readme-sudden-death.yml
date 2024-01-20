@@ -25,7 +25,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - if: github.event_name != 'pull_request' || github.event.action != 'closed'
         run: sed -i -e "s/Python [0-9.]*/Python $(cat .python-version)/g" README.md
-      - uses: dev-hato/actions-diff-pr-management@v1.1.8
+      - uses: dev-hato/actions-diff-pr-management@v1.1.9
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           branch-name-prefix: readme

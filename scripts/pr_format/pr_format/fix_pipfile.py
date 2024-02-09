@@ -4,6 +4,7 @@ Pipfileに対して以下の修正を行う。
 * Pipfileでのバージョン指定が「*」となっているパッケージについて、バージョン指定を実際にインストールされるものに修正する
 * プロジェクト内のPythonファイルでimportされているがPipfile内には存在しないパッケージをPipfileの「packages」セクションに追加する
 """
+
 import importlib.util
 import re
 import sys
@@ -140,7 +141,9 @@ def get_imported_packages(project_root: Path) -> set[str]:
             for imported_package in re.findall(
                 r"^(?:import|from)\s+(\w+)", python_file.read(), re.MULTILINE
             ):
-                if not is_std_or_local_lib(project_root, imported_package):
+                if imported_package != "sudden_death" and not is_std_or_local_lib(
+                    project_root, imported_package
+                ):
                     imported_packages.add(imported_package)
 
     return imported_packages
@@ -160,7 +163,8 @@ def get_pipfile_packages(pipfile: Pipfile) -> set[str] | NoReturn:
         if not is_pipfile_packages(pipfile_value):
             raise TypeError("Failed to cast to PipfilePackages: " + str(pipfile_value))
 
-        pipfile_packages |= set(pipfile_value.keys())
+        for package_name in pipfile_value.keys():
+            pipfile_packages.add(package_name.lower().replace("_", "-"))
 
     return pipfile_packages
 
@@ -173,9 +177,8 @@ def exist_package_in_pipfile(packages: list[str], pipfile_packages: set[str]) ->
     :return: 与えられたパッケージ群のいずれかがPipfile内に存在するか
     """
     for package_name in packages:
-        for pn in [package_name, package_name.lower()]:
-            if pn in pipfile_packages:
-                return True
+        if package_name.lower().replace("_", "-") in pipfile_packages:
+            return True
 
     return False
 

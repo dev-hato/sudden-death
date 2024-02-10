@@ -21,16 +21,10 @@ jobs:
           path: sudden-death
           ref: ${{ github.sha }}
           token: ${{steps.generate_token.outputs.token}}
-      - name: Set org name
-        uses: actions/github-script@v7.0.1
-        id: set_org_name
-        with:
-          result-encoding: string
-          script: return process.env.GITHUB_REPOSITORY.split('/')[0]
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           fetch-depth: 0
-          repository: ${{steps.set_org_name.outputs.result}}/hato-bot
+          repository: ${{ github.repository_owner }}/hato-bot
           path: hato-bot
       - name: Copy CI
         run: bash "${GITHUB_WORKSPACE}/sudden-death/scripts/pr_copy_ci_sudden_death/pr_copy_ci/copy_ci.sh"

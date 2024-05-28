@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5d0deeeea458078990d4ef13dad30f2a1ac1e8ce0954460120a6c287151fc63a"
+            "sha256": "979ee41526d973c119a669a38c3bba11b24980f7b87bd2c5819b24a6448df0ef"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -44,12 +44,12 @@
         },
         "autopep8": {
             "hashes": [
-                "sha256:57c1026ee3ee40f57c5b93073b705f8e30aa52411fca33306d730274d2882bba",
-                "sha256:bc9b267f14d358a9af574b95e95a661681c60a275ffce419ba5fb4eae9920bcc"
+                "sha256:77b07146bf127aa88de78efc270d395a54ebb8284fdbe6542c4aeb8d969f4d9a",
+                "sha256:fead1b74ae69bf939b7eb371c83522a9262d9ac4b49f1c6f3d38ca1e31707f74"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==2.1.1"
+            "version": "==2.1.2"
         },
         "dill": {
             "hashes": [
@@ -183,7 +183,7 @@
                 "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"
             ],
             "index": "pypi",
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==0.10.2"
         },
         "tomlkit": {

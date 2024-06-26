@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "57fdedc3fe0f921817b919f10ddc6234d23f5fc673ac1aac57d7aab456628e1c"
+            "sha256": "629d45a9c7fb09673230c216e4962abff92ed19c0eabff5bca4c98dd23782122"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -161,12 +161,12 @@
         },
         "pylint": {
             "hashes": [
-                "sha256:02f6c562b215582386068d52a30f520d84fdbcf2a95fc7e855b816060d048b60",
-                "sha256:b3d7d2708a3e04b4679e02d99e72329a8b7ee8afb8d04110682278781f889fa8"
+                "sha256:43b8ffdf1578e4e4439fa1f6ace402281f5dd61999192280fa12fe411bef2999",
+                "sha256:5753d27e49a658b12a48c2883452751a2ecfc7f38594e0980beb03a6e77e6f86"
             ],
             "index": "pypi",
             "markers": "python_full_version >= '3.8.0'",
-            "version": "==3.2.3"
+            "version": "==3.2.4"
         },
         "setuptools": {
             "hashes": [

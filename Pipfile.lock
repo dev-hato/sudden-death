@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0f6530583d8735494bccadceef05d30285ebb872db9dd1bc5affb90f558a5f17"
+            "sha256": "813ac973beeac0585aac5d577c75d9944274ef4a7edff3c087e503eac7573d67"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -170,12 +170,12 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:032d42ee9fb536e33087fb66cac5f840eb9391ed05637b3f2a76a7c8fb477936",
-                "sha256:33874fdc59b3188304b2e7c80d9029097ea31627180896fb549c578ceb8a0855"
+                "sha256:5a0d9c6a2f332881a0153f629d8000118efd33255cfa802757924c53312c76da",
+                "sha256:98b4d786a12fadd34eabf69e8d014b84e5fc655981e4ff419994700434ace132"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==71.1.0"
+            "version": "==72.0.0"
         },
         "toml": {
             "hashes": [
@@ -183,7 +183,7 @@
                 "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"
             ],
             "index": "pypi",
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==0.10.2"
         },
         "tomlkit": {

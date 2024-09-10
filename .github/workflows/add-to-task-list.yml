@@ -14,11 +14,11 @@ jobs:
     steps:
       - name: Generate a token
         id: generate_token
-        uses: actions/create-github-app-token@31c86eb3b33c9b601a1f60f98dcbfd1d70f379b4 # v1.10.3
+        uses: actions/create-github-app-token@3378cda945da322a8db4b193e19d46352ebe2de5 # v1.10.4
         with:
           app-id: ${{ secrets.PROJECT_AUTOMATION_APP_ID }}
           private-key: ${{ secrets.PROJECT_AUTOMATION_PRIVATE_KEY }}
-      - uses: dev-hato/actions-add-to-projects@c4ae1c3a7c3cf1d6bd25a3f51122ce1828632fb5 # v0.0.77
+      - uses: dev-hato/actions-add-to-projects@cf891aa9c9173f90e6670671ed43f2ee25b5626b # v0.0.79
         with:
           github-token: ${{steps.generate_token.outputs.token}}
           project-url: https://github.com/orgs/dev-hato/projects/1

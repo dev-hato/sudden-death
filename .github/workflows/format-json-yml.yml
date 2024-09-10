@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Generate a token
         id: generate_token
-        uses: actions/create-github-app-token@31c86eb3b33c9b601a1f60f98dcbfd1d70f379b4 # v1.10.3
+        uses: actions/create-github-app-token@3378cda945da322a8db4b193e19d46352ebe2de5 # v1.10.4
         with:
           app-id: ${{ secrets.PROJECT_AUTOMATION_APP_ID }}
           private-key: ${{ secrets.PROJECT_AUTOMATION_PRIVATE_KEY }}
@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
           token: ${{steps.generate_token.outputs.token}}
-      - uses: dev-hato/actions-format-json-yml@1147f6653aed20bc1fa692cdfb470e4c4f2266df # v0.0.66
+      - uses: dev-hato/actions-format-json-yml@c5371101d8408bd8e8d363128ace15f1487bf8d7 # v0.0.70
         with:
           github-token: ${{steps.generate_token.outputs.token}}
 concurrency:

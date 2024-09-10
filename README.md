@@ -9,8 +9,8 @@
 ## Requirements
 
 - Python 3.12.4
-- ```pipenv install```
-- ```npm install```
+- `pipenv install`
+- `npm install`
 
 ## Usage
 

@@ -40,7 +40,7 @@ jobs:
           branch-name-prefix: pr-copy-ci
           pr-title-prefix: hato-botのCIを反映するよ！
           working-directory: sudden-death
-          exit-failure: 'false'
+          exit-failure: "false"
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true

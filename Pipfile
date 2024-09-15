@@ -11,7 +11,7 @@ flake8 = "==7.1.1"
 importlib-metadata = "==8.5.0"
 toml = "==0.10.2"
 types-toml = "==0.10.8.20240310"
-setuptools = "==74.1.2"
+setuptools = "==74.1.3"
 
 [packages]
 pyperclip = ">=1.5.27"

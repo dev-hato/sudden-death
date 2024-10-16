@@ -18,4 +18,4 @@ pyperclip = ">=1.5.27"
 click = "==8.1.7"
 
 [requires]
-python_version = "3.12"
+python_version = "3.13"

@@ -30,11 +30,9 @@ jobs:
         uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
         with:
           cache: npm
-          node-version-file: sudden-death/package.json
           cache-dependency-path: sudden-death/package-lock.json
-      - run: |
-          npm ci
-          mv node_modules/ ../
+          node-version-file: sudden-death/package.json
+      - run: bash "${GITHUB_WORKSPACE}/sudden-death/scripts/pr_copy_ci_sudden_death/pr_copy_ci/npm_ci.sh"
         working-directory: sudden-death
       - name: Copy CI
         run: bash "${GITHUB_WORKSPACE}/sudden-death/scripts/pr_copy_ci_sudden_death/pr_copy_ci/copy_ci.sh"
@@ -44,8 +42,8 @@ jobs:
           script: |
             const {tsImport} = require('tsx/esm/api')
             const {script} = await tsImport(
-              './sudden-death/scripts/pr_copy_ci_sudden_death/pr_copy_ci/copy_package.ts',
-              process.env.GITHUB_WORKSPACE + '/'
+              './scripts/pr_copy_ci_sudden_death/pr_copy_ci/copy_package.ts',
+              process.env.GITHUB_WORKSPACE + '/sudden-death/'
             )
             script()
       - uses: dev-hato/actions-diff-pr-management@e5c78b251a69f44f93b2f1398e06b129bcf151ec # v1.2.0

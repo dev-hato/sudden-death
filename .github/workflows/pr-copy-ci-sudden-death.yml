@@ -32,7 +32,9 @@ jobs:
           cache: npm
           node-version-file: sudden-death/package.json
           cache-dependency-path: sudden-death/package-lock.json
-      - run: npm ci
+      - run: |
+          npm ci
+          mv node_modules/ ../
         working-directory: sudden-death
       - name: Copy CI
         run: bash "${GITHUB_WORKSPACE}/sudden-death/scripts/pr_copy_ci_sudden_death/pr_copy_ci/copy_ci.sh"

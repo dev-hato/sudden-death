@@ -1,28 +1,45 @@
-const fs = require("fs");
-const hatoBotPackage = require(
-  `${process.env.GITHUB_WORKSPACE}/hato-bot/package.json`,
-);
-const hatoBotPackageLock = require(
-  `${process.env.GITHUB_WORKSPACE}/hato-bot/package-lock.json`,
-);
-const suddenDeathPackage = require(
-  `${process.env.GITHUB_WORKSPACE}/sudden-death/package.json`,
-);
-const suddenDeathPackageLock = require(
-  `${process.env.GITHUB_WORKSPACE}/sudden-death/package-lock.json`,
-);
+import {readFileSync,writeFileSync} from "fs";
 
-module.exports = () => {
+export default function script() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const hatoBotPackage: { [key: string]: any } = JSON.parse(
+    readFileSync(
+      `${process.env.GITHUB_WORKSPACE}/hato-bot/package.json`,
+    ).toString(),
+  );
+
+  const suddenDeathPackagePath = `${process.env.GITHUB_WORKSPACE}/sudden-death/package.json`;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const suddenDeathPackage: { [key: string]: any } = JSON.parse(
+    readFileSync(suddenDeathPackagePath).toString(),
+  );
+
   delete hatoBotPackage.scripts;
 
   for (const packageKey of Object.keys(hatoBotPackage)) {
     suddenDeathPackage[packageKey] = hatoBotPackage[packageKey];
   }
 
-  fs.writeFileSync(
-    `${process.env.GITHUB_WORKSPACE}/sudden-death/package.json`,
+  writeFileSync(
+    suddenDeathPackagePath,
     JSON.stringify(suddenDeathPackage, null, "  ") + "\n",
     "utf8",
+  );
+
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const hatoBotPackageLock: { [key: string]: any } = JSON.parse(
+    readFileSync(
+      `${process.env.GITHUB_WORKSPACE}/hato-bot/package-lock.json`,
+    ).toString(),
+  );
+
+  const suddenDeathPackageLockPath = `${process.env.GITHUB_WORKSPACE}/sudden-death/package-lock.json`;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const suddenDeathPackageLock: { [key: string]: any } = JSON.parse(
+    readFileSync(suddenDeathPackageLockPath).toString(),
   );
 
   delete hatoBotPackageLock.name;
@@ -31,9 +48,9 @@ module.exports = () => {
     suddenDeathPackageLock[packageLockKey] = hatoBotPackageLock[packageLockKey];
   }
 
-  fs.writeFileSync(
-    `${process.env.GITHUB_WORKSPACE}/sudden-death/package-lock.json`,
+  writeFileSync(
+    suddenDeathPackageLockPath,
     JSON.stringify(suddenDeathPackageLock, null, "  ") + "\n",
     "utf8",
   );
-};
+}

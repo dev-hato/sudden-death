@@ -26,6 +26,13 @@ jobs:
           fetch-depth: 0
           repository: ${{ github.repository_owner }}/hato-bot
           path: hato-bot
+      - name: Set up Node.js
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
+        with:
+          cache: npm
+          node-version-file: sudden-death/package.json
+      - run: npm ci
+        working-directory: sudden-death
       - name: Copy CI
         run: bash "${GITHUB_WORKSPACE}/sudden-death/scripts/pr_copy_ci_sudden_death/pr_copy_ci/copy_ci.sh"
       - name: Copy package.json

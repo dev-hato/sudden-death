@@ -27,7 +27,6 @@ export default function script() {
     "utf8",
   );
 
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const hatoBotPackageLock: { [key: string]: any } = JSON.parse(
     readFileSync(

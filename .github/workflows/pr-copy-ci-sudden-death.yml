@@ -31,6 +31,7 @@ jobs:
         with:
           cache: npm
           node-version-file: sudden-death/package.json
+          cache-dependency-path: sudden-death/package-lock.json
       - run: npm ci
         working-directory: sudden-death
       - name: Copy CI

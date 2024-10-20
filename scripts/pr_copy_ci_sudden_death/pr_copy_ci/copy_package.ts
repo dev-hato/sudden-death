@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "fs";
 
-export default function script() {
+export function script() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const hatoBotPackage: { [key: string]: any } = JSON.parse(
     readFileSync(

@@ -44,8 +44,8 @@ jobs:
           script: |
             const {tsImport} = require('tsx/esm/api')
             const {script} = await tsImport(
-              './scripts/pr_copy_ci_sudden_death/pr_copy_ci/copy_package.ts',
-              process.env.GITHUB_WORKSPACE + '/sudden-death/'
+              './sudden-death/scripts/pr_copy_ci_sudden_death/pr_copy_ci/copy_package.ts',
+              process.env.GITHUB_WORKSPACE + '/'
             )
             script()
       - uses: dev-hato/actions-diff-pr-management@e5c78b251a69f44f93b2f1398e06b129bcf151ec # v1.2.0

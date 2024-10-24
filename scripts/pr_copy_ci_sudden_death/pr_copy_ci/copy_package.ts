@@ -1,4 +1,4 @@
-import {readFileSync,writeFileSync} from "fs";
+import { readFileSync, writeFileSync } from "fs";
 
 export function script() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,7 +26,6 @@ export function script() {
     JSON.stringify(suddenDeathPackage, null, "  ") + "\n",
     "utf8",
   );
-
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const hatoBotPackageLock: { [key: string]: any } = JSON.parse(

@@ -2,8 +2,8 @@
 パッケージインストール用スクリプト
 """
 
-from setuptools import setup
 import toml
+from setuptools import setup
 
 
 def _requires_from_file(filename):

@@ -16,11 +16,9 @@ for f in $(find hato-bot/scripts -type f | grep -v hato_bot | sed -e "s:hato-bot
 	cp "hato-bot/${f}" "sudden-death/${f}"
 done
 
-for f in .markdown-lint.yml .python-lint .textlintrc .gitleaks.toml .mypy.ini .pre-commit-config.yaml .python-version .pep8 .flake8 .python-black .isort.cfg .prettierignore renovate.json requirements.txt; do
+for f in .markdown-lint.yml .python-lint .textlintrc .gitleaks.toml .mypy.ini .pre-commit-config.yaml .pep8 .flake8 .python-black .isort.cfg .prettierignore renovate.json requirements.txt; do
 	rm -f "sudden-death/${f}"
 	cp hato-bot/${f} sudden-death/
 done
-PATTERN_BEFORE="$(grep '^click' sudden-death/Pipfile)"
-PATTERN_AFTER="$(grep '^click' hato-bot/Pipfile)"
-PATTERN="s/${PATTERN_BEFORE}/${PATTERN_AFTER}/g"
-sed -i -e "${PATTERN}" sudden-death/Pipfile
+PATTERN_AFTER="$(grep click hato-bot/pyproject.toml | sed -e 's/^.*click==\([0-9.]*\)".*$/\1/g')"
+sed -i -e "s/click==[0-9.]*\"/click==${PATTERN_AFTER}\"/g" sudden-death/pyproject.toml

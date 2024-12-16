@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       - if: github.event_name != 'pull_request' || github.event.action != 'closed'
-        run: sed -i -e "s/Python [0-9.]*/Python $(cat .python-version)/g" README.md
+        run: sed -i -e "s/Python [0-9.]*/Python $(yq '.project.requires-python' pyproject.toml | sed -e 's/==//g')/g" README.md
       - uses: dev-hato/actions-diff-pr-management@8d475e5bc78f61c40024d4859b79134b66f788d2 # v1.2.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}

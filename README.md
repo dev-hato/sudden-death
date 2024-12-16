@@ -9,7 +9,7 @@
 ## Requirements
 
 - Python 3.13.1
-- `pipenv install`
+- `uv sync`
 - `npm install`
 
 ## Usage
@@ -17,7 +17,7 @@
 sd.pyを実行することで次に入力した文字が吹き出しになって出力されます。また、同時に出力された吹き出しはクリップボードにもコピーされます。
 
 ```sh
-pipenv run python sd.py メッセージ
+uv run sd.py メッセージ
 ```
 
 ## lintをかける方法

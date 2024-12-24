@@ -190,6 +190,8 @@ source = { virtual = "." }
 dependencies = [
     { name = "click" },
     { name = "pyperclip" },
+    { name = "toml" },
+    { name = "types-toml" },
 ]
 
 [package.dev-dependencies]
@@ -201,13 +203,14 @@ dev = [
     { name = "pylint" },
     { name = "setuptools" },
     { name = "toml" },
-    { name = "types-toml" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "click", specifier = "==8.1.8" },
     { name = "pyperclip", specifier = ">=1.5.27" },
+    { name = "toml", specifier = "==0.10.2" },
+    { name = "types-toml", specifier = "==0.10.8.20240310" },
 ]
 
 [package.metadata.requires-dev]
@@ -219,7 +222,6 @@ dev = [
     { name = "pylint", specifier = "==3.3.3" },
     { name = "setuptools", specifier = "==75.6.0" },
     { name = "toml", specifier = "==0.10.2" },
-    { name = "types-toml", specifier = "==0.10.8.20240310" },
 ]
 
 [[package]]

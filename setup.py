@@ -3,6 +3,7 @@
 """
 
 import re
+
 from setuptools import setup
 
 
@@ -20,10 +21,10 @@ def _requires_from_file(filename):
             elif is_in_packages and _r.startswith("dependencies "):
                 dep_data = _r.split("=", 1)
 
-                if len(dep_data)==0:
+                if len(dep_data) == 0:
                     return requires
 
-                for package in re.sub(r'[\["\]]',"", dep_data[1]).split(","):
+                for package in re.sub(r'[\["\]]', "", dep_data[1]).split(","):
                     package = package.strip()
                     if package:
                         requires.append(package)

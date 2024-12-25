@@ -5,6 +5,11 @@ description = "突然の死(ハリフキダシ)を生成するツール"
 requires-python = "==3.13.1"
 dependencies = [ "click==8.1.8", "pyperclip>=1.5.27",]
 include = [ "py.typed",]
+[[project.authors]]
+name = "koluku"
+
+[dependency-groups]
+dev = [ "autopep8==2.3.1", "pylint==3.3.3", "mypy==1.14.0", "flake8==7.1.1", "importlib-metadata==8.5.0", "toml==0.10.2", "types-toml==0.10.8.20240310", "setuptools==75.6.0", "toml==0.10.2",]
 
 [project.license]
 text = "MIT"
@@ -12,13 +17,8 @@ text = "MIT"
 [project.urls]
 Repository = "https://github.com/koluku/sudden-death"
 
-[[project.authors]]
-name = "koluku"
-
-[dependency-groups]
-dev = [ "autopep8==2.3.1", "pylint==3.3.3", "mypy==1.14.0", "flake8==7.1.1", "importlib-metadata==8.5.0", "toml==0.10.2", "types-toml==0.10.8.20240310", "setuptools==75.6.0", "toml==0.10.2",]
-
 [tool.uv]
 [[tool.uv.index]]
 name = "pypi"
 url = "https://pypi.org/simple"
+

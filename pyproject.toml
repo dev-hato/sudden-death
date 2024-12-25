@@ -17,7 +17,7 @@ text = "MIT"
 Repository = "https://github.com/koluku/sudden-death"
 
 [tool.setuptools.package-data]
-'sudden_death' = ['src/*.json']
+'sudden_death' = ['py.typed']
 
 [tool.uv]
 [[tool.uv.index]]

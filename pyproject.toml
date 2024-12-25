@@ -4,7 +4,6 @@ version = "0.0.1"
 description = "突然の死(ハリフキダシ)を生成するツール"
 requires-python = "==3.13.1"
 dependencies = [ "click==8.1.8", "pyperclip>=1.5.27",]
-includes = [ "py.typed",]
 [[project.authors]]
 name = "koluku"
 
@@ -16,6 +15,9 @@ text = "MIT"
 
 [project.urls]
 Repository = "https://github.com/koluku/sudden-death"
+
+[tool.setuptools.package-data]
+'sudden_death' = ['src/*.json']
 
 [tool.uv]
 [[tool.uv.index]]

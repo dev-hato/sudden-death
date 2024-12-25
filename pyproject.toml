@@ -16,11 +16,10 @@ text = "MIT"
 [project.urls]
 Repository = "https://github.com/koluku/sudden-death"
 
-[tool.setuptools.package-data]
-'sudden_death' = ['py.typed']
-
 [tool.uv]
 [[tool.uv.index]]
 name = "pypi"
 url = "https://pypi.org/simple"
 
+[tool.setuptools.package-data]
+sudden_death = [ "py.typed",]

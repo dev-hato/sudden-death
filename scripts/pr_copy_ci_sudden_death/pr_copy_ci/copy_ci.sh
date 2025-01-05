@@ -22,5 +22,3 @@ for f in .markdown-lint.yml .python-lint .textlintrc .gitleaks.toml .mypy.ini .p
 	rm -f "sudden-death/${f}"
 	cp hato-bot/${f} sudden-death/
 done
-PATTERN_AFTER="$(grep click hato-bot/pyproject.toml | sed -e 's/^.*click==\([0-9.]*\)".*$/\1/g')"
-sed -i -e "s/click==[0-9.]*\"/click==${PATTERN_AFTER}\"/g" sudden-death/pyproject.toml

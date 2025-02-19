@@ -10,7 +10,7 @@ export async function script(
     {
       owner: context.repo.owner,
       repo: "hato-bot",
-      workflow_id: ".github/workflows/pr-format.yml",
+      workflow_id: "pr-format.yml",
       ref: "master",
     };
   console.log("call actions.createWorkflowDispatch:");

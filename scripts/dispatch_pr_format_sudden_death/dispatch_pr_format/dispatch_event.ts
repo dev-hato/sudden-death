@@ -11,7 +11,7 @@ export async function script(
       owner: context.repo.owner,
       repo: "hato-bot",
       workflow_id: "pr-format.yml",
-      ref: "master",
+      ref: "develop",
     };
   console.log("call actions.createWorkflowDispatch:");
   console.log(actionsCreateWorkflowDispatchParams);

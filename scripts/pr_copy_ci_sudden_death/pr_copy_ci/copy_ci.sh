@@ -22,3 +22,6 @@ for f in .markdown-lint.yml .python-lint .textlintrc .gitleaks.toml .mypy.ini .p
 	rm -f "sudden-death/${f}"
 	cp hato-bot/${f} sudden-death/
 done
+
+sed -i -e "s/requires-python = .*/$(grep requires-python hato-bot/pyproject.toml)/g" sudden-death/pyproject.toml
+sed -i -e "s/required-version = .*/$(grep required-version hato-bot/pyproject.toml)/g" sudden-death/pyproject.toml

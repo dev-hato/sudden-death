@@ -8,8 +8,6 @@
     "lint:secret": "docker run --rm --platform=linux/amd64 -v $(pwd):/path -w /path zricethezav/gitleaks protect --verbose --redact"
   },
   "devDependencies": {
-    "@actions/github": "6.0.0",
-    "@octokit/plugin-rest-endpoint-methods": "13.3.1",
     "@proofdict/textlint-rule-proofdict": "3.1.2",
     "@textlint-ja/textlint-rule-no-insert-dropping-sa": "2.0.1",
     "markdownlint-cli": "0.44.0",
@@ -32,5 +30,9 @@
   "engines": {
     "node": ">=20",
     "npm": "^10.8.2 || ^9.6.5"
+  },
+  "dependencies": {
+    "@actions/github": "6.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "13.3.1"
   }
 }

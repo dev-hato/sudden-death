@@ -17,7 +17,7 @@ text = "MIT"
 Repository = "https://github.com/koluku/sudden-death"
 
 [tool.uv]
-required-version = "0.6.9"
+required-version = "0.6.10"
 [[tool.uv.index]]
 name = "pypi"
 url = "https://pypi.org/simple"

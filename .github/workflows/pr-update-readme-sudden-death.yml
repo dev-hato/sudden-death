@@ -23,6 +23,7 @@ jobs:
           # submodule: 'recursive'
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
       - if: github.event_name != 'pull_request' || github.event.action != 'closed'
         run: sed -i -e "s/Python [0-9.]*/Python $(yq '.project.requires-python' pyproject.toml | sed -e 's/==//g')/g" README.md
       - uses: dev-hato/actions-diff-pr-management@cea263ca46759ebc8c812b8595be4df129761037 # v2.1.0

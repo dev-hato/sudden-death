@@ -9,18 +9,11 @@ jobs:
   pr-copy-ci:
     runs-on: ubuntu-latest
     steps:
-      - name: Generate a token
-        id: generate_token
-        uses: actions/create-github-app-token@3ff1caaa28b64c9cc276ce0a02e2ff584f3900c5 # v2.0.2
-        with:
-          app-id: ${{ secrets.PROJECT_AUTOMATION_APP_ID }}
-          private-key: ${{ secrets.PROJECT_AUTOMATION_PRIVATE_KEY }}
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
           path: sudden-death
           ref: ${{ github.sha }}
-          token: ${{steps.generate_token.outputs.token}}
           persist-credentials: false
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -48,6 +41,12 @@ jobs:
               process.env.GITHUB_WORKSPACE + '/sudden-death/'
             )
             script()
+      - name: Generate a token
+        id: generate_token
+        uses: actions/create-github-app-token@3ff1caaa28b64c9cc276ce0a02e2ff584f3900c5 # v2.0.2
+        with:
+          app-id: ${{ secrets.PROJECT_AUTOMATION_APP_ID }}
+          private-key: ${{ secrets.PROJECT_AUTOMATION_PRIVATE_KEY }}
       - uses: dev-hato/actions-diff-pr-management@cea263ca46759ebc8c812b8595be4df129761037 # v2.1.0
         with:
           github-token: ${{steps.generate_token.outputs.token}}

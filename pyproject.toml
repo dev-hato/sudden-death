@@ -8,7 +8,7 @@ dependencies = [ "click==8.1.8", "pyperclip>=1.5.27",]
 name = "koluku"
 
 [dependency-groups]
-dev = [ "autopep8==2.3.2", "pylint==3.3.7", "mypy==1.15.0", "flake8==7.2.0", "importlib-metadata==8.7.0", "toml==0.10.2", "types-toml==0.10.8.20240310", "setuptools==79.0.1", "toml==0.10.2",]
+dev = [ "autopep8==2.3.2", "pylint==3.3.7", "mypy==1.15.0", "flake8==7.2.0", "importlib-metadata==8.7.0", "toml==0.10.2", "types-toml==0.10.8.20240310", "setuptools==80.4.0", "toml==0.10.2",]
 
 [project.license]
 text = "MIT"

@@ -18,10 +18,13 @@ for f in $(find hato-bot/scripts -type f | grep -v hato_bot | sed -e "s:hato-bot
 	cp "hato-bot/${f}" "sudden-death/${f}"
 done
 
-for f in .markdown-lint.yml .python-lint .textlintrc .gitleaks.toml .mypy.ini .pre-commit-config.yaml .pep8 .flake8 .python-black .isort.cfg .eslintrc.yml renovate.json .github/dependabot.yml; do
+for f in .markdown-lint.yml .python-lint .textlintrc .gitleaks.toml .mypy.ini .pre-commit-config.yaml .pep8 .flake8 .python-black .isort.cfg .eslintrc.yml renovate.json; do
 	rm -f "sudden-death/${f}"
 	cp hato-bot/${f} sudden-death/
 done
+
+rm -f "sudden-death/.github/dependabot.yml"
+cp hato-bot/.github/dependabot.yml sudden-death/.github/
 
 sed -i -e "s/requires-python = .*/$(grep requires-python hato-bot/pyproject.toml)/g" sudden-death/pyproject.toml
 sed -i -e "s/required-version = .*/$(grep required-version hato-bot/pyproject.toml)/g" sudden-death/pyproject.toml

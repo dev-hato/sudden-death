@@ -3,7 +3,7 @@ name = "sudden_death"
 version = "0.0.1"
 description = "突然の死(ハリフキダシ)を生成するツール"
 requires-python = "==3.13.3"
-dependencies = [ "click==8.2.0", "pyperclip>=1.5.27",]
+dependencies = [ "click==8.2.1", "pyperclip>=1.5.27",]
 [[project.authors]]
 name = "koluku"
 
@@ -17,7 +17,7 @@ text = "MIT"
 Repository = "https://github.com/koluku/sudden-death"
 
 [tool.uv]
-required-version = "0.7.3"
+required-version = "0.7.7"
 [[tool.uv.index]]
 name = "pypi"
 url = "https://pypi.org/simple"

@@ -19,7 +19,6 @@ dev = [
   "importlib-metadata==8.7.0",
   "tomlkit==0.13.3",
   "setuptools==80.9.0",
-  "toml==0.10.2",
 ]
 
 [project.license]

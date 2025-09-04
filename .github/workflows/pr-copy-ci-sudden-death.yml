@@ -32,7 +32,7 @@ jobs:
       - name: Copy CI
         run: bash "${GITHUB_WORKSPACE}/sudden-death/scripts/pr_copy_ci_sudden_death/pr_copy_ci/copy_ci.sh"
       - name: Copy package.json
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           script: |
             const {tsImport} = require('tsx/esm/api')

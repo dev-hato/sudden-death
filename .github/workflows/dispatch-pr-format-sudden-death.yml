@@ -30,7 +30,7 @@ jobs:
           github-token: ${{steps.generate_token.outputs.token}}
           script: |
             const {tsImport} = require('tsx/esm/api')
-            const {script} = await tsImport(
+            const {default: {script}} = await tsImport(
               './scripts/dispatch_pr_format_sudden_death/dispatch_pr_format/dispatch_event.ts',
               process.env.GITHUB_WORKSPACE + '/'
             )

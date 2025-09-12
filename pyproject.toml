@@ -14,7 +14,7 @@ name = "koluku"
 dev = [
   "autopep8==2.3.2",
   "pylint==3.3.8",
-  "mypy==1.17.1",
+  "mypy==1.18.1",
   "flake8==7.3.0",
   "importlib-metadata==8.7.0",
   "tomlkit==0.13.3",

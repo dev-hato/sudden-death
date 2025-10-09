@@ -2,7 +2,7 @@
 name = "sudden_death"
 version = "0.0.1"
 description = "突然の死(ハリフキダシ)を生成するツール"
-requires-python = "==3.13.7"
+requires-python = "==3.14.0"
 dependencies = [
   "click==8.3.0",
   "pyperclip>=1.5.27",

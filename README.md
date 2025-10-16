@@ -8,7 +8,7 @@
 
 ## Requirements
 
-- Python 3.13.8
+- Python 3.14.0
 - `uv sync`
 - `npm install`
 

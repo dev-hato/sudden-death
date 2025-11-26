@@ -14,6 +14,7 @@ name = "koluku"
 dev = [
   "autopep8==2.3.2",
   "pylint==4.0.3",
+  "sqlfluff==3.5.0",
   "mypy==1.18.2",
   "flake8==7.3.0",
   "importlib-metadata==8.7.0",

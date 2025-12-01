@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+permissions: {}
 jobs:
   dispatch_pr_format:
     runs-on: ubuntu-latest

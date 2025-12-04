@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 workflows_path=.github/workflows
 find sudden-death/${workflows_path} -type f \

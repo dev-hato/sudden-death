@@ -8,7 +8,7 @@ find sudden-death/${workflows_path} -type f \
 
 for f in $(find hato-bot/${workflows_path} -type f \
 	-not -name "*hato-bot.yml" | sed -e "s:hato-bot/${workflows_path}/::g"); do
-	yq '(.jobs.*.steps.[] | select(has("with")).with | select(has("repo-name")).repo-name) = "dev-hato/sudden-death"' "hato-bot/${workflows_path}/${f}" >"sudden-death/${workflows_path}/${f}"
+	yq '(.jobs.* | select(has("steps")).steps.[] | select(has("with")).with | select(has("repo-name")).repo-name) = "dev-hato/sudden-death"' "hato-bot/${workflows_path}/${f}" >"sudden-death/${workflows_path}/${f}"
 done
 for f in $(find sudden-death/scripts -type f | grep -v sudden_death); do
 	rm -rf "$f"

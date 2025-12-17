@@ -36,7 +36,6 @@ jobs:
         -r
         --skip-git
         ./
-    steps: []
   scan-pr:
     if: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
     uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@b77c075a1235514558f0eb88dbd31e22c45e0cd2" # v2.3.0
@@ -52,4 +51,3 @@ jobs:
         -r
         --skip-git
         ./
-    steps: []

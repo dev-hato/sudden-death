@@ -18,7 +18,7 @@ dev = [
   "mypy==1.19.1",
   "flake8==7.3.0",
   "importlib-metadata==8.7.1",
-  "tomlkit==0.13.3",
+  "tomlkit==0.14.0",
   "setuptools==80.9.0",
 ]
 

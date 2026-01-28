@@ -33,7 +33,7 @@
     "npm": "~11.6.2 || ^10.9.3"
   },
   "dependencies": {
-    "@actions/github": "7.0.0",
+    "@actions/github": "9.0.0",
     "@octokit/plugin-rest-endpoint-methods": "17.0.0"
   }
 }

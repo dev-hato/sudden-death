@@ -19,7 +19,7 @@ dev = [
   "flake8==7.3.0",
   "importlib-metadata==8.7.1",
   "tomlkit==0.14.0",
-  "setuptools==80.9.0",
+  "setuptools==80.10.1",
 ]
 
 [project.license]

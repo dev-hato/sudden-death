@@ -13,7 +13,7 @@ name = "koluku"
 [dependency-groups]
 dev = [
   "autopep8==2.3.2",
-  "pylint==4.0.4",
+  "pylint==4.0.5",
   "sqlfluff==4.0.4",
   "mypy==1.19.1",
   "flake8==7.3.0",

@@ -470,7 +470,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "click", specifier = "==8.3.0" },
-    { name = "pyperclip", specifier = ">=1.5.27" },
+    { name = "pyperclip", specifier = ">=1.11.0" },
 ]
 
 [package.metadata.requires-dev]

@@ -5,7 +5,7 @@ description = "突然の死(ハリフキダシ)を生成するツール"
 requires-python = "==3.14.3"
 dependencies = [
   "click==8.3.0",
-  "pyperclip>=1.5.27",
+  "pyperclip>=1.11.0",
 ]
 [[project.authors]]
 name = "koluku"

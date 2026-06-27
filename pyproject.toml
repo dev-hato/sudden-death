@@ -15,7 +15,7 @@ dev = [
   "autopep8==2.3.2",
   "pylint==4.0.6",
   "sqlfluff==4.2.2",
-  "mypy==1.19.1",
+  "mypy==2.1.0",
   "flake8==7.3.0",
   "importlib-metadata==9.0.0",
   "tomlkit==0.15.0",

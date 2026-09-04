@@ -17,7 +17,7 @@ dev = [
   "sqlfluff==4.3.0",
   "mypy==2.1.0",
   "flake8==7.3.0",
-  "importlib-metadata==9.0.0",
+  "importlib-metadata==9.0.1",
   "tomlkit==0.15.1",
   "setuptools==84.0.0",
 ]

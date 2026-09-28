@@ -28,6 +28,7 @@ jobs:
           cache: npm
           cache-dependency-path: sudden-death/package-lock.json
           node-version-file: sudden-death/package.json
+      - uses: flatt-security/setup-takumi-guard-npm@3d2e7e64161c6fb76c74abd6600e4248d4859153 # v1.3.0
       - run: bash "${GITHUB_WORKSPACE}/sudden-death/scripts/pr_copy_ci_sudden_death/pr_copy_ci/npm_ci.sh"
         working-directory: sudden-death
       - name: Copy CI

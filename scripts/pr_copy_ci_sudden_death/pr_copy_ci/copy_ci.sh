@@ -3,10 +3,14 @@ set -e
 
 workflows_path=.github/workflows
 find sudden-death/${workflows_path} -type f \
+	\( -name "*.yml" -o -name "*.yaml" \) \
 	-not -name "*sudden-death.yml" \
+	-not -name "verify-lockfile.yml" \
 	-exec rm -f {} \;
 
 for f in $(find hato-bot/${workflows_path} -type f \
+	\( -name "*.yml" -o -name "*.yaml" \) \
+	-not -name "verify-lockfile.yml" \
 	-not -name "*hato-bot.yml" | sed -e "s:hato-bot/${workflows_path}/::g"); do
 	yq '(.jobs.* | select(has("steps")).steps.[] | select(has("with")).with | select(has("repo-name")).repo-name) = "dev-hato/sudden-death"' "hato-bot/${workflows_path}/${f}" >"sudden-death/${workflows_path}/${f}"
 done

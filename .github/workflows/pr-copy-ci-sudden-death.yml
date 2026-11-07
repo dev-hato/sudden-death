@@ -8,6 +8,7 @@ permissions: {}
 jobs:
   # hato-botのCIの差分がpushされたらPRを作成する
   pr-copy-ci:
+    timeout-minutes: 30
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -58,6 +59,9 @@ jobs:
         with:
           client-id: ${{ secrets.PROJECT_AUTOMATION_APP_CLIENT_ID }}
           private-key: ${{ secrets.PROJECT_AUTOMATION_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write
       - uses: dev-hato/actions-diff-pr-management@a3c6f1d6cb3f46d2f48ac3856ef603ef2e508061 # v2.4.0
         with:
           github-token: ${{steps.generate_token.outputs.token}}

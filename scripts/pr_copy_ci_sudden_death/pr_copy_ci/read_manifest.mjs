@@ -59,13 +59,27 @@ function inspectTree(root, relativePath) {
   }
 }
 
-export function readManifest(sourceDirectory, targetDirectory) {
-  const source = resolve(sourceDirectory);
-  if (lstatSync(source).isSymbolicLink() || !lstatSync(source).isDirectory()) {
-    throw new Error(`Expected a regular source directory: ${source}`);
+function inspectDirectory(directory, owner) {
+  if (
+    lstatSync(directory).isSymbolicLink() ||
+    !lstatSync(directory).isDirectory()
+  ) {
+    throw new Error(`Expected a regular ${owner} directory: ${directory}`);
   }
-  inspectPath(source, manifestPath);
-  const manifest = JSON.parse(readFileSync(join(source, manifestPath), "utf8"));
+}
+
+function validateStringArray(values, field) {
+  if (
+    !Array.isArray(values) ||
+    values.length === 0 ||
+    values.some((value) => typeof value !== "string") ||
+    new Set(values).size !== values.length
+  ) {
+    throw new Error(`${field} must be a nonempty array of unique strings`);
+  }
+}
+
+function validateManifestShape(manifest) {
   if (
     manifest === null ||
     Array.isArray(manifest) ||
@@ -77,52 +91,63 @@ export function readManifest(sourceDirectory, targetDirectory) {
   ) {
     throw new Error("Unsupported CI sync manifest; expected schemaVersion 1");
   }
-  for (const field of ["files", "excludeWorkflows"]) {
-    const values = manifest[field];
-    if (
-      !Array.isArray(values) ||
-      values.length === 0 ||
-      values.some((value) => typeof value !== "string") ||
-      new Set(values).size !== values.length
-    ) {
-      throw new Error(`${field} must be a nonempty array of unique strings`);
-    }
-  }
-  for (const pattern of manifest.excludeWorkflows) {
+  validateStringArray(manifest.files, "files");
+  validateStringArray(manifest.excludeWorkflows, "excludeWorkflows");
+}
+
+function validateWorkflowExclusions(patterns) {
+  for (const pattern of patterns) {
     if (!/^[A-Za-z0-9_.*-]+\.ya?ml$/u.test(pattern)) {
       throw new Error(
         `Unsafe workflow filename pattern: ${JSON.stringify(pattern)}`,
       );
     }
   }
-  for (const file of manifest.files) {
+}
+
+function inspectSourceFiles(source, files) {
+  for (const file of files) {
     if (!/^[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*$/u.test(file)) {
       throw new Error(`Unsafe manifest file path: ${JSON.stringify(file)}`);
     }
     inspectPath(source, file);
   }
+}
+
+function validateAquaFiles(files) {
   for (const file of ["aqua.yaml", "aqua-checksums.json"]) {
-    if (!manifest.files.includes(file)) {
+    if (!files.includes(file)) {
       throw new Error(`The CI sync contract must include ${file}`);
     }
   }
-  inspectPath(source, "pyproject.toml");
-  inspectTree(source, ".github/workflows");
-  inspectTree(source, "scripts");
+}
+
+function inspectSharedLayout(directory) {
+  inspectPath(directory, "pyproject.toml");
+  inspectTree(directory, ".github/workflows");
+  inspectTree(directory, "scripts");
+}
+
+function inspectTarget(targetDirectory, files) {
+  const target = resolve(targetDirectory);
+  inspectDirectory(target, "target");
+  for (const file of files) inspectPath(target, file, { optional: true });
+  inspectSharedLayout(target);
+}
+
+export function readManifest(sourceDirectory, targetDirectory) {
+  const source = resolve(sourceDirectory);
+  inspectDirectory(source, "source");
+  inspectPath(source, manifestPath);
+  const manifest = JSON.parse(readFileSync(join(source, manifestPath), "utf8"));
+  validateManifestShape(manifest);
+  validateWorkflowExclusions(manifest.excludeWorkflows);
+  inspectSourceFiles(source, manifest.files);
+  validateAquaFiles(manifest.files);
+  inspectSharedLayout(source);
 
   if (targetDirectory !== undefined) {
-    const target = resolve(targetDirectory);
-    if (
-      lstatSync(target).isSymbolicLink() ||
-      !lstatSync(target).isDirectory()
-    ) {
-      throw new Error(`Expected a regular target directory: ${target}`);
-    }
-    for (const file of manifest.files)
-      inspectPath(target, file, { optional: true });
-    inspectPath(target, "pyproject.toml");
-    inspectTree(target, ".github/workflows");
-    inspectTree(target, "scripts");
+    inspectTarget(targetDirectory, manifest.files);
   }
   return manifest;
 }

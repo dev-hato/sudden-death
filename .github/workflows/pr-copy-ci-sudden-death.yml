@@ -24,7 +24,12 @@ jobs:
           fetch-depth: 0
           repository: ${{ github.repository_owner }}/hato-bot
           path: hato-bot
+          ref: develop
           persist-credentials: false
+      - name: Log synchronization commits
+        run: |
+          git -C hato-bot rev-parse HEAD
+          git -C sudden-death rev-parse HEAD
       - name: Set up Node.js
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:

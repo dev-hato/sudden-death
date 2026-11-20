@@ -6,6 +6,9 @@ workflows:
     '.github/workflows/add-to-task-list.yml':
         - 'actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510'
         - 'dev-hato/actions-add-to-projects@3f6870416d1ebf4eae418af990a83780bdd45f1f'
+    '.github/workflows/codeql.yml':
+        - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
+        - 'github/codeql-action@33d7b85da1a04171e211befe2c739303b9a4c066'
     '.github/workflows/dispatch-pr-format-sudden-death.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510'
@@ -18,6 +21,7 @@ workflows:
         - 'dev-hato/actions-format-json-yml@6b0c6a884f1d2653ae3502c32317e8a412845acc'
     '.github/workflows/ghalint.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
+        - 'aquaproj/aqua-installer@611554c6f0137ba41c8dd15aca8bee82504ea461'
     '.github/workflows/github-actions-cache-cleaner.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'dev-hato/github-actions-cache-cleaner@88d68a261462dd5f6f6632adec3fa5cf5466c865'
@@ -45,18 +49,23 @@ workflows:
         - 'super-linter/super-linter@2da136927bd4a73596db63044b504547c62cb854'
     '.github/workflows/pr-update-gitleaks.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
+        - 'actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510'
         - 'actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1'
         - 'dev-hato/actions-update-gitleaks@d33ae3f5380b57036a94ecb1a40344d7cb3f20d6'
         - 'flatt-security/setup-takumi-guard-npm@14f07d0cbc739b42a1b7c70a04c2b84cd1318ddd'
     '.github/workflows/pr-update-readme-sudden-death.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
+        - 'actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510'
         - 'dev-hato/actions-diff-pr-management@474e401b8a7df75f1c804a60aa987140c1e0548c'
     '.github/workflows/update-actions-lock.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
         - 'actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510'
         - 'dev-hato/actions-diff-pr-management@474e401b8a7df75f1c804a60aa987140c1e0548c'
-    '.github/workflows/verify-lockfile.yml':
+    '.github/workflows/update-aqua-checksum.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
+        - 'actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510'
+        - 'aquaproj/aqua-installer@611554c6f0137ba41c8dd15aca8bee82504ea461'
+        - 'dev-hato/actions-diff-pr-management@474e401b8a7df75f1c804a60aa987140c1e0548c'
 dependencies:
     'actions/add-to-project@f2c1f1fa649a891be84948ea89b5dfba1526ef05':
         ref: 'v2.0.1'
@@ -83,6 +92,11 @@ dependencies:
         commit: 'sha1-949feb2413d6458794dcd2491c4babbbce0c15c1'
         owner_id: 44036562
         repo_id: 189476904
+    'aquaproj/aqua-installer@611554c6f0137ba41c8dd15aca8bee82504ea461':
+        ref: 'v4.1.1'
+        commit: 'sha1-611554c6f0137ba41c8dd15aca8bee82504ea461'
+        owner_id: 95116411
+        repo_id: 400140776
     'astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2':
         ref: 'v10.3.3'
         commit: 'sha1-68559e99cc807c1eb7e9238fd43a15bba460eec2'
@@ -139,6 +153,11 @@ dependencies:
         commit: 'sha1-bc8eb92eda08d7941ae58d8c27e1fe58aff7d7d9'
         owner_id: 88821409
         repo_id: 1185057622
+    'github/codeql-action@33d7b85da1a04171e211befe2c739303b9a4c066':
+        ref: 'v4.39.3'
+        commit: 'sha1-33d7b85da1a04171e211befe2c739303b9a4c066'
+        owner_id: 9919
+        repo_id: 259445878
     'super-linter/super-linter@2da136927bd4a73596db63044b504547c62cb854':
         ref: 'v9.0.0'
         commit: 'sha1-2da136927bd4a73596db63044b504547c62cb854'

@@ -21,10 +21,12 @@ for f in $(find hato-bot/scripts -type f | grep -v hato_bot | sed -e "s:hato-bot
 	cp "hato-bot/${f}" "sudden-death/${f}"
 done
 
-for f in .markdown-lint.yml .python-lint .textlintrc .gitleaks.toml .mypy.ini .pre-commit-config.yaml .flake8 .python-black .isort.cfg .codespellrc eslint.config.mjs renovate.json aqua.yaml aqua-checksums.json; do
+for f in .markdown-lint.yml .python-lint .textlintrc .gitleaks.toml .mypy.ini .pre-commit-config.yaml .flake8 .python-black .isort.cfg .codespellrc eslint.config.mjs renovate.json go.mod go.sum; do
 	rm -f "sudden-death/${f}"
 	cp hato-bot/${f} sudden-death/
 done
+
+sed -i -e "s:^module github.com/dev-hato/hato-bot$:module github.com/dev-hato/sudden-death:" sudden-death/go.mod
 
 rm -f "sudden-death/.github/dependabot.yml"
 cp hato-bot/.github/dependabot.yml sudden-death/.github/
